@@ -3,7 +3,7 @@ import type { EntityRecord } from '@ledra/types';
 
 export const packageName = '@ledra/search';
 
-type SearchAttributeFilter = {
+export type SearchAttributeFilter = {
   field: keyof EntityRecord | string;
   operator: '=' | '~';
   value: string;
@@ -35,6 +35,14 @@ const entityOrder = (left: EntityRecord, right: EntityRecord): number => {
 
 const toNormalizedString = (value: unknown): string => String(value ?? '').trim().toLowerCase();
 
+const toNormalizedValues = (value: unknown): readonly string[] => {
+  if (Array.isArray(value)) {
+    return value.map((entry) => toNormalizedString(entry));
+  }
+
+  return [toNormalizedString(value)];
+};
+
 const normalizeStructuredQuery = (query: SearchQueryInput): StructuredSearchQuery => {
   if (typeof query !== 'string') {
     const normalized: StructuredSearchQuery = {};
@@ -52,13 +60,17 @@ const normalizeStructuredQuery = (query: SearchQueryInput): StructuredSearchQuer
       normalized.relationType = query.relationType.trim();
     }
     if (query.attributes?.length) {
-      normalized.attributes = query.attributes
+      const attributes = query.attributes
         .map((filter) => ({
           ...filter,
           field: filter.field.trim(),
           value: filter.value.trim()
         }))
         .filter((filter) => filter.field.length > 0);
+
+      if (attributes.length > 0) {
+        normalized.attributes = attributes;
+      }
     }
 
     return normalized;
@@ -71,7 +83,7 @@ const normalizeStructuredQuery = (query: SearchQueryInput): StructuredSearchQuer
 
   const tokenized = trimmed.split(/\s+/);
   const attributes: SearchAttributeFilter[] = [];
-  let textParts: string[] = [];
+  const textParts: string[] = [];
   let type: string | undefined;
   let relatedTo: string | undefined;
   let relationType: string | undefined;
@@ -130,7 +142,7 @@ const normalizeStructuredQuery = (query: SearchQueryInput): StructuredSearchQuer
 };
 
 const matchesAttribute = (entity: EntityRecord, filter: SearchAttributeFilter): boolean => {
-  const haystack = toNormalizedString((entity as Record<string, unknown>)[filter.field]);
+  const haystacks = toNormalizedValues((entity as Record<string, unknown>)[filter.field]);
   const needle = toNormalizedString(filter.value);
 
   if (!needle) {
@@ -138,10 +150,39 @@ const matchesAttribute = (entity: EntityRecord, filter: SearchAttributeFilter): 
   }
 
   if (filter.operator === '=') {
-    return haystack === needle;
+    return haystacks.some((haystack) => haystack === needle);
   }
 
-  return haystack.includes(needle);
+  return haystacks.some((haystack) => haystack.includes(needle));
+};
+
+const buildRelatedEntityIds = (
+  repository: ReadOnlyRepository,
+  relatedTo: string,
+  relationType: string
+): ReadonlySet<string> => {
+  const normalizedRelationType = relationType.toLowerCase();
+  const normalizedRelatedTo = relatedTo.toLowerCase();
+
+  return new Set(
+    repository
+      .listRelations()
+      .filter((relation) => !normalizedRelationType || relation.relationType.toLowerCase() === normalizedRelationType)
+      .flatMap((relation) => {
+        const sourceId = relation.sourceId.toLowerCase();
+        const targetId = relation.targetId.toLowerCase();
+
+        if (sourceId === normalizedRelatedTo) {
+          return [sourceId, targetId];
+        }
+
+        if (targetId === normalizedRelatedTo) {
+          return [sourceId, targetId];
+        }
+
+        return [];
+      })
+  );
 };
 
 export const searchEntities = (
@@ -156,19 +197,14 @@ export const searchEntities = (
   const relationType = normalizedQuery.relationType ? normalizedQuery.relationType.toLowerCase() : '';
   const attributes = normalizedQuery.attributes ?? [];
 
+  const relatedEntityIds = relatedTo ? buildRelatedEntityIds(repository, relatedTo, relationType) : undefined;
+
   const filtered = repository.listEntities().filter((entity) => {
     if (type && entity.type.toLowerCase() !== type) {
       return false;
     }
 
-    if (
-      relatedTo &&
-      !entity.relations.some(
-        (relation) =>
-          relation.targetId.toLowerCase() === relatedTo &&
-          (!relationType || relation.type.toLowerCase() === relationType)
-      )
-    ) {
+    if (relatedTo && relatedEntityIds && !relatedEntityIds.has(entity.id.toLowerCase())) {
       return false;
     }
 
