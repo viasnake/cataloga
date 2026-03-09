@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawn } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
@@ -15,6 +15,29 @@ const runCli = (args) => {
 
   return JSON.parse(output);
 };
+
+test('workspace ledra command exposes help output', () => {
+  const output = execFileSync(
+    'npm',
+    ['exec', '--workspace', '@ledra/cli', 'ledra', '--', '--help'],
+    {
+      encoding: 'utf8'
+    }
+  );
+
+  assert.match(output, /Usage: ledra/u);
+  assert.match(output, /validate/u);
+});
+
+test('web build outputs static viewer assets', () => {
+  assert.equal(existsSync('apps/web/dist/index.html'), true);
+  const indexHtml = readFileSync('apps/web/dist/index.html', 'utf8');
+  const assetFiles = readdirSync('apps/web/dist/assets');
+
+  assert.match(indexHtml, /<div id="root"><\/div>/u);
+  assert.ok(assetFiles.some((fileName) => fileName.endsWith('.js')));
+  assert.ok(assetFiles.some((fileName) => fileName.endsWith('.css')));
+});
 
 test('ledra validate succeeds with sample registry graph', () => {
   const result = runCli(['validate', '--registry', registryPath]);
