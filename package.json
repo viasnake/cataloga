@@ -12,6 +12,7 @@
     "build": "npm run build --workspaces --if-present",
     "ledra": "npm exec --workspace @ledra/cli ledra --",
     "lint": "eslint . --ext .ts,.tsx,.mts,.cts",
+    "package:cloudflare": "node scripts/package-cloudflare.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "npm run typecheck --workspaces --if-present",

@@ -24,6 +24,18 @@ npm exec --workspace @ledra/cli ledra -- export --registry packages/sample-data/
 
 Then open `apps/web/dist/index.html` with a static file server and browse the generated registry bundle.
 
+## Cloudflare deployment model
+
+Ledra's recommended Cloudflare production model uses two repositories:
+
+1. `engine repo`: Ledra itself, including the Worker, viewer, packaging script, and deployment docs.
+2. `data repo`: your Git-managed `registry/` source of truth plus GitHub Actions workflows that pin a
+   Ledra release tag.
+
+The data repo runs `validate` and `export`, packages the viewer assets with `bundle.json` and
+`metadata.json`, and deploys the resulting artifact to Cloudflare Workers + Assets. The Cloudflare
+runtime reads only packaged assets and never live-reads GitHub.
+
 ## Registry layout
 
 ```text
@@ -51,6 +63,7 @@ registry/
 ## Docs
 
 - [Self-host guide](docs/self-host-guide.md)
+- [2-repo Cloudflare deployment](docs/2-repo-cloudflare-deployment.md)
 - [CLI examples](docs/cli-examples.md)
 - [API reference](docs/api-reference.md)
 - [Bundle format](docs/bundle-format.md)

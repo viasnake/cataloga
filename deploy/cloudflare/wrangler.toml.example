@@ -4,6 +4,16 @@ compatibility_date = "2025-01-01"
 
 [assets]
 directory = "./public"
+binding = "ASSETS"
 
 # account_id = "<YOUR_ACCOUNT_ID>"
-# route = "registry.example.com/*"
+
+[env.preview]
+workers_dev = true
+
+[env.production]
+workers_dev = false
+
+[[env.production.routes]]
+pattern = "registry.example.com/*"
+custom_domain = true

@@ -4,7 +4,7 @@ Ledra exposes a read-only HTTP API. The API never mutates registry data and is i
 
 ## Base behavior
 
-- Methods: `GET` only
+- Methods: `GET`, `HEAD`
 - Content type: `application/json; charset=utf-8`
 - Writes: not supported
 - Health check: `GET /health`
@@ -72,6 +72,11 @@ Response shape:
 ### `GET /api/views`
 
 Returns view definitions from `registry/views/`.
+
+### `GET /api/metadata`
+
+Cloudflare deployments may expose deployment metadata from `metadata.json` beside the static bundle.
+This endpoint is optional outside Cloudflare packaging.
 
 ## Errors
 

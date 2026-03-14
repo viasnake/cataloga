@@ -28,9 +28,15 @@ docker compose -f deploy/docker/compose.yaml up --build -d
 - Files:
   - `deploy/cloudflare/wrangler.toml.example`
   - `deploy/cloudflare/worker.mjs`
-- Uses CLI export output wired into assets (`deploy/cloudflare/public/bundle.json`).
+- Uses a packaged artifact directory containing viewer assets, `bundle.json`, and `metadata.json`.
+- Recommended production flow is a 2-repository model: the Ledra engine repo provides runtime code and
+  templates, while a separate data repo runs GitHub Actions and deploys to Cloudflare.
 
 ```bash
-npm exec --workspace @ledra/cli ledra -- export --registry <registry_repo_path> --out deploy/cloudflare/public/bundle.json
+npm exec --workspace @ledra/cli ledra -- export --registry <registry_repo_path> --out .artifacts/cloudflare/bundle.json
+node scripts/package-cloudflare.mjs --bundle .artifacts/cloudflare/bundle.json --out deploy/cloudflare/public
 cd deploy/cloudflare && npx wrangler deploy
 ```
+
+See `docs/2-repo-cloudflare-deployment.md` for the full GitHub-driven preview, production, and rollback
+workflow.

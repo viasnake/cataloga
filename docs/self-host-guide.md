@@ -57,3 +57,14 @@ curl http://127.0.0.1:3000/api/views
 3. Re-run `validate`.
 4. Re-run `build` or `export`.
 5. Redeploy static assets or API runtime.
+
+## Cloudflare production note
+
+For Cloudflare production, the recommended model is no longer a local `wrangler deploy` from this
+repository. Use a separate data repository as the source of truth and run deployment from GitHub Actions.
+
+- Engine repo: Ledra runtime, Worker, viewer, packaging script, and workflow templates.
+- Data repo: `registry/` plus preview, production, and rollback workflows.
+- Runtime contract: Cloudflare serves packaged assets only. It never reads GitHub live.
+
+Use `docs/2-repo-cloudflare-deployment.md` and `deploy/cloudflare/README.md` when setting up that model.
