@@ -26,13 +26,16 @@ Then open `apps/web/dist/index.html` with a static file server and browse the ge
 
 ## Cloudflare deployment model
 
-Ledra's recommended Cloudflare production model uses a single deployment repository, typically a fork of
-the original Ledra repository.
+Ledra now distinguishes two Cloudflare paths:
 
-That repository keeps `registry/`, GitHub Actions workflows, the Cloudflare Worker, and the packaging
-script together so one repository commit is the deploy and rollback unit. CI runs `validate`, `export`,
-and packaging inside that repository, then deploys the resulting artifact to Cloudflare Workers + Assets.
-The Cloudflare runtime reads only packaged assets and never live-reads GitHub.
+1. `Managed hosting`: the recommended product path. Customers keep a Git repository with `registry/` as
+   the source of truth. Ledra reads that repository through a GitHub App and deploys packaged assets from
+   operator-owned Cloudflare infrastructure.
+2. `Direct self-host deployment`: a lower-level path for teams that want to run Ledra on their own
+   Cloudflare account.
+
+Both paths keep Cloudflare runtime read-only and package-based. Cloudflare serves built assets,
+`bundle.json`, and `metadata.json`; it never live-reads GitHub at runtime.
 
 ## Registry layout
 
@@ -61,7 +64,11 @@ registry/
 ## Docs
 
 - [Self-host guide](docs/self-host-guide.md)
-- [Cloudflare deployment](docs/cloudflare-deployment.md)
+- [Managed hosting architecture](docs/managed-hosting-architecture.md)
+- [Managed hosting operational model](docs/managed-hosting-operational-model.md)
+- [Managed hosting operations](docs/managed-hosting-operations.md)
+- [Managed hosting roadmap](docs/managed-hosting-roadmap.md)
+- [Cloudflare self-host deployment](docs/cloudflare-deployment.md)
 - [CLI examples](docs/cli-examples.md)
 - [API reference](docs/api-reference.md)
 - [Bundle format](docs/bundle-format.md)

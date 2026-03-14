@@ -3,6 +3,10 @@
 Ledra keeps the exported registry bundle unchanged and writes deployment metadata to a sibling
 `metadata.json` file.
 
+This schema describes the direct self-host Cloudflare path. The managed-hosting architecture described in
+`docs/managed-hosting-architecture.md` intentionally evolves this contract toward a separate
+`metadataSchemaVersion: 3` with distinct `engine`, `data`, and `control` provenance.
+
 ## Purpose
 
 - Identify which repository commit is deployed.

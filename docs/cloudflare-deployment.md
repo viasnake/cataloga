@@ -1,10 +1,13 @@
-# Cloudflare deployment
+# Cloudflare self-host deployment
 
-This guide describes the recommended production setup for Ledra on Cloudflare.
+This guide describes the direct self-host path for Ledra on Cloudflare.
+
+If you are building a hosted product where customer data stays in customer-owned repositories and Cloudflare
+credentials stay operator-side, start with `docs/managed-hosting-architecture.md` instead.
 
 ## Repository model
 
-Use a single deployment repository, typically a fork of the original Ledra repository.
+The direct self-host path assumes one deployment repository controlled by the operator or self-hosting team.
 
 That repository contains:
 
@@ -14,8 +17,7 @@ That repository contains:
 - the Cloudflare packaging script
 - GitHub Actions workflows for preview, production, and rollback
 
-The deployment repository is the source of truth for both code and data. Upstream Ledra is an upgrade
-source, not a deployment input.
+This path is appropriate when the same team owns both the registry data and the Cloudflare account.
 
 ## Deployment contract
 
