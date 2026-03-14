@@ -9,14 +9,14 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build --workspace @ledra/types && npm run build --workspace @ledra/schemas && npm run build --workspace @ledra/core && npm run build --workspace @ledra/validator && npm run build --workspace @ledra/bundle && npm run build --workspace @ledra/search && npm run build --workspace @ledra/managed-hosting && npm run build --workspace @ledra/renderer && npm run build --workspace @ledra/sample-data && npm run build --workspace @ledra/api && npm run build --workspace @ledra/cli && npm run build --workspace @ledra/web",
     "ledra": "npm exec --workspace @ledra/cli ledra --",
     "lint": "eslint . --ext .ts,.tsx,.mts,.cts",
     "package:cloudflare": "node scripts/package-cloudflare.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm run build --workspaces --if-present && node --test tests/*.test.mjs"
+    "test": "npm run build && node --test tests/*.test.mjs"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.18.0",
