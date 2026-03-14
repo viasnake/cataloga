@@ -71,6 +71,9 @@ Production should be driven from the deployment repository itself.
 
 Template workflows live under `deploy/cloudflare/workflows/`.
 
+For this repository's built-in demo site, use `.github/workflows/ledra-demo-production.yml`. It packages
+`packages/sample-data/registry` and deploys it as a read-only Cloudflare demo.
+
 Preview deploys are intentionally limited to trusted same-repository PRs. Secret-bearing deploy jobs should
 use trusted workflow configuration rather than PR-modified deployment code.
 Rollback is production-oriented; preview Workers should be recreated from the relevant PR branch.
