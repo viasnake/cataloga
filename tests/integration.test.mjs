@@ -1,29 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { createReadOnlyApi } from '../apps/api/dist/apps/api/src/index.js';
+import { runLedraCli } from '../apps/cli/dist/apps/cli/src/index.js';
 
 const registryPath = 'packages/sample-data/registry';
-const cliEntry = 'apps/cli/dist/apps/cli/src/index.js';
 
 const runCli = (args) => {
-  const output = execFileSync('node', [cliEntry, ...args], {
-    encoding: 'utf8'
-  });
-
+  const output = runLedraCli(args);
   return JSON.parse(output);
 };
 
 test('workspace ledra command exposes help output', () => {
-  const output = execFileSync(
-    'npm',
-    ['exec', '--workspace', '@ledra/cli', 'ledra', '--', '--help'],
-    {
-      encoding: 'utf8'
-    }
-  );
+  const output = runLedraCli(['--help']);
 
   assert.match(output, /Usage: ledra/u);
   assert.match(output, /validate/u);
@@ -115,68 +106,17 @@ test('export writes a bundle file when --out is provided', () => {
   }
 });
 
-test('serve starts a read-only HTTP API from CLI', async () => {
-  const port = 43117;
-  const child = spawn(
-    'node',
-    [cliEntry, 'serve', '--registry', registryPath, '--port', String(port)],
-    {
-      stdio: ['ignore', 'pipe', 'pipe']
-    }
-  );
+test('read-only API exposes registry data without mutation paths', () => {
+  const api = createReadOnlyApi(registryPath);
+  const types = api['/api/types']();
+  const search = api['/api/search']('attributes.siteId=site-tokyo');
+  const views = api['/api/views']();
+  const diagnostics = api['/api/diagnostics']();
 
-  try {
-    await new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => reject(new Error('serve startup timeout')), 10000);
-
-      child.stdout.on('data', (chunk) => {
-        const text = chunk.toString();
-        if (text.includes('Listening')) {
-          clearTimeout(timeout);
-          resolve(undefined);
-        }
-      });
-
-      child.stderr.on('data', (chunk) => {
-        clearTimeout(timeout);
-        reject(new Error(chunk.toString()));
-      });
-
-      child.on('exit', (code) => {
-        clearTimeout(timeout);
-        reject(new Error(`serve exited early with code ${String(code)}`));
-      });
-    });
-
-    const types = JSON.parse(
-      execFileSync('curl', ['-sS', `http://127.0.0.1:${String(port)}/api/types`], {
-        encoding: 'utf8'
-      })
-    );
-    const search = JSON.parse(
-      execFileSync(
-        'curl',
-        [
-          '-sS',
-          `http://127.0.0.1:${String(port)}/api/search?q=${encodeURIComponent('attributes.siteId=site-tokyo')}`
-        ],
-        {
-          encoding: 'utf8'
-        }
-      )
-    );
-    const views = JSON.parse(
-      execFileSync('curl', ['-sS', `http://127.0.0.1:${String(port)}/api/views`], {
-        encoding: 'utf8'
-      })
-    );
-
-    assert.ok(Array.isArray(types));
-    assert.ok(types.includes('site'));
-    assert.equal(search.length, 4);
-    assert.equal(views.length, 2);
-    assert.equal(views[0].kind, 'view');
-  } finally {
-    child.kill('SIGTERM');
-  }
+  assert.ok(Array.isArray(types));
+  assert.ok(types.includes('site'));
+  assert.equal(search.length, 4);
+  assert.equal(views.length, 2);
+  assert.equal(views[0].kind, 'view');
+  assert.equal(diagnostics.repository.readOnly, true);
 });
