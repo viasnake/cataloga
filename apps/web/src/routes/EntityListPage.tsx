@@ -1,182 +1,252 @@
 import { useMemo } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { EntityCard } from '../components/EntityCard';
-import { filterEntitiesForViewer, getSelectedView } from '../index';
+import { RelationGraph } from '../components/RelationGraph';
+import { formatEntityTypeLabel, uiCopy } from '../copy';
+import {
+  filterEntitiesForViewer,
+  getEntityRelations,
+  getRelationDegreeMap,
+  getSelectedView
+} from '../index';
 import { useViewerContext } from '../viewer-context';
 
 export const EntityListPage = () => {
   const { bundle } = useViewerContext();
   const navigate = useNavigate();
-  const { viewId } = useParams();
+  const { scopeId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchText = searchParams.get('q') ?? '';
   const filteredView = useMemo(
-    () => filterEntitiesForViewer(bundle, searchText, viewId),
-    [bundle, searchText, viewId]
+    () => filterEntitiesForViewer(bundle, searchText, scopeId),
+    [bundle, searchText, scopeId]
   );
-  const selectedView = viewId ? getSelectedView(bundle.graph, viewId) : undefined;
+  const selectedScope = scopeId ? getSelectedView(bundle.graph, scopeId) : undefined;
+  const relationDegrees = useMemo(() => getRelationDegreeMap(bundle), [bundle]);
+  const visibleEntities = filteredView.entities;
+  const spotlightEntity = [...visibleEntities].sort(
+    (left, right) => (relationDegrees.get(right.id) ?? 0) - (relationDegrees.get(left.id) ?? 0)
+  )[0];
+  const spotlightRelations = spotlightEntity ? getEntityRelations(bundle, spotlightEntity.id) : [];
+  const availableScopes = bundle.graph.views;
 
-  const availableViews = bundle.graph.views;
-  const highlightedEntities = filteredView.entities.slice(0, 12);
-
-  if (viewId && !selectedView) {
+  if (scopeId && !selectedScope) {
     return (
-      <section className="panel-surface content-panel empty-panel">
-        <p className="section-kicker">View not found</p>
-        <h1>That curated view does not exist.</h1>
-        <p>Choose another starting point and continue from the entity catalog.</p>
-        <Link className="primary-action" to="/entities">
-          Open all entities
+      <section className="status-panel">
+        <p className="eyebrow">不明なスコープ</p>
+        <h1>{uiCopy.status.scopeNotFoundTitle}</h1>
+        <p>{uiCopy.status.scopeNotFoundBody}</p>
+        <Link className="primary-button mt-6" to="/explore">
+          {uiCopy.labels.allNodes}
         </Link>
       </section>
     );
   }
 
   return (
-    <>
-      <section className="panel-surface section-hero compact-hero">
-        <div>
-          <p className="section-kicker">{selectedView ? 'Curated view' : 'Entity explorer'}</p>
-          <h1>{selectedView ? selectedView.title : 'Browse the registry as a proper index'}</h1>
-          <p className="section-lede">
-            {selectedView?.summary ??
-              'Search across typed records, then open each entity in a dedicated detail page.'}
-          </p>
-        </div>
+    <div className="space-y-6">
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_360px]">
+        <article className="panel px-6 py-7 sm:px-8 sm:py-8">
+          <div className="flex flex-col gap-6">
+            <div className="space-y-4">
+              <p className="eyebrow">探索</p>
+              <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-[2.8rem]">
+                {selectedScope ? selectedScope.title : 'ノードと関係を横断して探索する'}
+              </h1>
+              <p className="max-w-2xl text-base leading-8 text-slate-600">
+                {selectedScope?.summary ??
+                  '検索、スコープ、関係密度を手掛かりに、bundle 内の network を絞り込みながら探索できます。'}
+              </p>
+            </div>
 
-        <div className="hero-meta-grid">
-          <div>
-            <span>Results</span>
-            <strong>{filteredView.entities.length}</strong>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1.3fr)_260px]">
+              <label className="space-y-2" htmlFor="entity-search">
+                <span className="text-sm font-semibold text-slate-700">{uiCopy.labels.search}</span>
+                <input
+                  id="entity-search"
+                  className="field-input"
+                  placeholder={uiCopy.labels.searchPlaceholder}
+                  value={searchText}
+                  onChange={(event) => {
+                    const next = new URLSearchParams(searchParams);
+                    if (event.target.value) {
+                      next.set('q', event.target.value);
+                    } else {
+                      next.delete('q');
+                    }
+
+                    setSearchParams(next, { replace: true });
+                  }}
+                />
+              </label>
+
+              <label className="space-y-2" htmlFor="scope-select">
+                <span className="text-sm font-semibold text-slate-700">{uiCopy.routes.scopes}</span>
+                <select
+                  className="field-input"
+                  id="scope-select"
+                  value={scopeId ?? ''}
+                  onChange={(event) => {
+                    const nextScopeId = event.target.value;
+                    const nextQuery = searchText ? `?q=${encodeURIComponent(searchText)}` : '';
+                    navigate(
+                      nextScopeId ? `/scopes/${nextScopeId}${nextQuery}` : `/explore${nextQuery}`
+                    );
+                  }}
+                >
+                  <option value="">{uiCopy.labels.allScopes}</option>
+                  {availableScopes.map((scope) => (
+                    <option key={scope.id} value={scope.id}>
+                      {scope.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="metric-card">
+                <span>表示ノード</span>
+                <strong>{visibleEntities.length}</strong>
+                <p>現在の検索語とスコープに含まれるノード数です。</p>
+              </div>
+              <div className="metric-card">
+                <span>対象タイプ</span>
+                <strong>
+                  {selectedScope
+                    ? selectedScope.entityTypes
+                        .map((type) => formatEntityTypeLabel(type))
+                        .join(' / ')
+                    : uiCopy.labels.allNodes}
+                </strong>
+                <p>探索対象の型をスコープ単位で切り替えられます。</p>
+              </div>
+              <div className="metric-card">
+                <span>検索クエリ</span>
+                <strong>{searchText || '未指定'}</strong>
+                <p>絞り込みが空の時は bundle 全体を横断します。</p>
+              </div>
+            </div>
           </div>
+        </article>
+
+        <aside className="panel px-6 py-7">
           <div>
-            <span>Scope</span>
-            <strong>
-              {selectedView ? selectedView.entityTypes.join(', ') : 'All entity types'}
-            </strong>
+            <p className="eyebrow">スコープ一覧</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+              利用可能なスコープ
+            </h2>
           </div>
-        </div>
-      </section>
-
-      <section className="toolbar-panel panel-surface">
-        <label className="field-block" htmlFor="entity-search">
-          <span>Search</span>
-          <input
-            id="entity-search"
-            placeholder="Search titles, ids, tags, or attributes"
-            value={searchText}
-            onChange={(event) => {
-              const next = new URLSearchParams(searchParams);
-              if (event.target.value) {
-                next.set('q', event.target.value);
-              } else {
-                next.delete('q');
-              }
-
-              setSearchParams(next, { replace: true });
-            }}
-          />
-        </label>
-
-        <label className="field-block" htmlFor="view-select">
-          <span>View</span>
-          <select
-            id="view-select"
-            value={viewId ?? ''}
-            onChange={(event) => {
-              const nextViewId = event.target.value;
-              const nextQuery = searchText ? `?q=${encodeURIComponent(searchText)}` : '';
-              navigate(nextViewId ? `/views/${nextViewId}${nextQuery}` : `/entities${nextQuery}`);
-            }}
-          >
-            <option value="">All entities</option>
-            {availableViews.map((view) => (
-              <option key={view.id} value={view.id}>
-                {view.title}
-              </option>
+          <div className="mt-5 space-y-3">
+            {availableScopes.map((scope) => (
+              <Link
+                key={scope.id}
+                className={`scope-card ${scope.id === selectedScope?.id ? 'border-teal-200 bg-teal-50/80' : ''}`}
+                to={`/scopes/${scope.id}${searchText ? `?q=${encodeURIComponent(searchText)}` : ''}`}
+              >
+                <div>
+                  <p className="font-semibold text-slate-950">{scope.title}</p>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">
+                    {scope.summary ?? '関連の切り口を固定しながら探索できます。'}
+                  </p>
+                </div>
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm">
+                  {scope.entityTypes.length}
+                </span>
+              </Link>
             ))}
-          </select>
-        </label>
+          </div>
+        </aside>
       </section>
 
-      <section className="content-grid list-page-grid">
-        <div className="panel-surface content-panel">
-          <div className="panel-heading">
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.38fr)_360px]">
+        <article className="panel px-6 py-7 sm:px-8">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="section-kicker">Entity results</p>
-              <h2>
-                {filteredView.entities.length === 0 ? 'No matching entities' : 'Open an entity'}
+              <p className="eyebrow">結果レーン</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+                {visibleEntities.length === 0
+                  ? uiCopy.status.noResultsTitle
+                  : 'ノードを開いて関係を読む'}
               </h2>
             </div>
-            <span className="pill-note">{filteredView.entities.length} visible</span>
+            <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-600">
+              {visibleEntities.length}
+              {uiCopy.labels.visible}
+            </span>
           </div>
 
-          {filteredView.entities.length === 0 ? (
+          {visibleEntities.length === 0 ? (
             <div className="empty-state-block">
-              <p>No entity matches the current search and view filters.</p>
+              <p>{uiCopy.status.noResultsBody}</p>
               <button
-                className="ghost-action"
+                className="secondary-button mt-5"
                 onClick={() => setSearchParams(new URLSearchParams())}
                 type="button"
               >
-                Clear filters
+                {uiCopy.actions.clearFilters}
               </button>
             </div>
           ) : (
-            <div className="entity-grid" aria-live="polite">
-              {filteredView.entities.map((entity) => (
+            <div className="grid gap-5" aria-live="polite">
+              {visibleEntities.map((entity) => (
                 <EntityCard
                   key={entity.id}
                   entity={entity}
+                  relationCount={relationDegrees.get(entity.id) ?? 0}
+                  scopeId={selectedScope?.id}
                   searchText={searchText}
-                  viewId={selectedView?.id}
                 />
               ))}
             </div>
           )}
-        </div>
+        </article>
 
-        <aside className="list-sidebar">
-          <section className="panel-surface support-panel sticky-panel">
-            <div className="panel-heading compact">
-              <div>
-                <p className="section-kicker">Available views</p>
-                <h2>Jump by investigation</h2>
-              </div>
+        <aside className="space-y-6">
+          <section className="panel px-6 py-7">
+            <div className="mb-4">
+              <p className="eyebrow">関係プレビュー</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+                現在の探索で目立つつながり
+              </h2>
             </div>
-
-            <div className="view-stack">
-              {availableViews.map((view) => (
+            {spotlightEntity ? (
+              <>
+                <RelationGraph
+                  className="min-h-[420px]"
+                  entity={spotlightEntity}
+                  entries={spotlightRelations}
+                />
                 <Link
-                  key={view.id}
-                  className={view.id === selectedView?.id ? 'view-row current' : 'view-row'}
-                  to={`/views/${view.id}`}
+                  className="secondary-button mt-4"
+                  to={`/nodes/${spotlightEntity.id}${scopeId ? `?scope=${scopeId}` : ''}`}
                 >
-                  <strong>{view.title}</strong>
-                  <span>{view.summary ?? 'Scoped records for a specific browsing task.'}</span>
+                  {spotlightEntity.title} を開く
                 </Link>
-              ))}
-            </div>
+              </>
+            ) : null}
           </section>
 
-          <section className="panel-surface support-panel">
-            <div className="panel-heading compact">
-              <div>
-                <p className="section-kicker">Quick preview</p>
-                <h2>What is in the current slice</h2>
-              </div>
+          <section className="panel px-6 py-7">
+            <div>
+              <p className="eyebrow">現在の範囲</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+                この範囲で見えている型
+              </h2>
             </div>
-            <ul className="stacked-entity-list">
-              {highlightedEntities.map((entity) => (
-                <li key={entity.id}>
-                  <strong>{entity.title}</strong>
-                  <span>{entity.type}</span>
-                </li>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {Array.from(new Set(visibleEntities.map((entity) => entity.type))).map((type) => (
+                <span
+                  key={type}
+                  className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700"
+                >
+                  {formatEntityTypeLabel(type)}
+                </span>
               ))}
-            </ul>
+            </div>
           </section>
         </aside>
       </section>
-    </>
+    </div>
   );
 };

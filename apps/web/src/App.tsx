@@ -3,6 +3,7 @@ import type { LedraBundle } from '@ledra/types';
 import { Route, Routes } from 'react-router-dom';
 import { loadBundleFromUrl, DEFAULT_BUNDLE_PATH } from './index';
 import { AppLayout } from './components/AppLayout';
+import { uiCopy } from './copy';
 import { EntityDetailPage } from './routes/EntityDetailPage';
 import { EntityListPage } from './routes/EntityListPage';
 import { NotFoundPage } from './routes/NotFoundPage';
@@ -16,20 +17,20 @@ type AppState =
   | { status: 'ready'; bundlePath: string; bundle: LedraBundle };
 
 const LoadingScreen = () => (
-  <main className="page-shell standalone-shell">
-    <section className="panel-surface status-panel">
-      <p className="section-kicker">Ledra Viewer</p>
-      <h1>Loading the published registry bundle.</h1>
-      <p>The interface is preparing the static dataset and route map.</p>
+  <main className="mx-auto flex min-h-screen w-full max-w-[900px] items-center px-4 py-10 sm:px-6 lg:px-8">
+    <section className="status-panel">
+      <p className="eyebrow">読み込み中</p>
+      <h1>{uiCopy.status.loadingTitle}</h1>
+      <p>{uiCopy.status.loadingBody}</p>
     </section>
   </main>
 );
 
 const ErrorScreen = ({ message }: { message: string }) => (
-  <main className="page-shell standalone-shell">
-    <section className="panel-surface status-panel error-panel">
-      <p className="section-kicker">Bundle load failed</p>
-      <h1>The viewer could not open `/bundle.json`.</h1>
+  <main className="mx-auto flex min-h-screen w-full max-w-[900px] items-center px-4 py-10 sm:px-6 lg:px-8">
+    <section className="status-panel border-rose-200/80 bg-rose-50/80">
+      <p className="eyebrow text-rose-700">bundle 読み込み失敗</p>
+      <h1>{uiCopy.status.errorTitle}</h1>
       <p>{message}</p>
     </section>
   </main>
@@ -62,9 +63,9 @@ const App = () => {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<OverviewPage />} />
-          <Route path="entities" element={<EntityListPage />} />
-          <Route path="entities/:entityId" element={<EntityDetailPage />} />
-          <Route path="views/:viewId" element={<EntityListPage />} />
+          <Route path="explore" element={<EntityListPage />} />
+          <Route path="nodes/:entityId" element={<EntityDetailPage />} />
+          <Route path="scopes/:scopeId" element={<EntityListPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

@@ -101,6 +101,17 @@ export const getEntityRelations = (
   });
 };
 
+export const getRelationDegreeMap = (bundle: LedraBundle): ReadonlyMap<string, number> => {
+  const counts = new Map<string, number>();
+
+  for (const relation of bundle.graph.relations) {
+    counts.set(relation.source.id, (counts.get(relation.source.id) ?? 0) + 1);
+    counts.set(relation.target.id, (counts.get(relation.target.id) ?? 0) + 1);
+  }
+
+  return counts;
+};
+
 export const loadBundleFromUrl = async (bundlePath = DEFAULT_BUNDLE_PATH): Promise<LedraBundle> => {
   const response = await fetch(bundlePath, {
     headers: {
