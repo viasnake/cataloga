@@ -19,7 +19,7 @@ import {
 
 test('managed-hosting validators accept valid contracts and expose helper keys', () => {
   const customerManifest = validateCustomerManifest({
-    kind: 'ledra-tenant',
+    kind: 'cataloga-tenant',
     version: 1,
     tenant: {
       slug: 'acme',
@@ -44,7 +44,7 @@ test('managed-hosting validators accept valid contracts and expose helper keys',
       repositoryNodeId: 'R_kgDOExample'
     },
     engine: {
-      ledraVersion: 'v0.2.0'
+      catalogaVersion: 'v0.2.0'
     },
     deployment: {
       environment: 'production',
@@ -60,7 +60,7 @@ test('managed-hosting validators accept valid contracts and expose helper keys',
     }
   });
   const override = validateHostingControlOverride({
-    kind: 'ledra-override',
+    kind: 'cataloga-override',
     version: 1,
     tenantId: 'tnt_01HXYZABCDEFG',
     slug: 'acme',
@@ -122,7 +122,7 @@ test('managed-hosting validators accept valid contracts and expose helper keys',
 
 test('managed-hosting validators report key contract failures', () => {
   const customerManifest = validateCustomerManifest({
-    kind: 'ledra-tenant',
+    kind: 'cataloga-tenant',
     version: 1,
     tenant: {
       slug: 'Acme'
@@ -143,7 +143,7 @@ test('managed-hosting validators report key contract failures', () => {
       repositoryNodeId: ''
     },
     engine: {
-      ledraVersion: 'v0.2.0'
+      catalogaVersion: 'v0.2.0'
     },
     deployment: {
       environment: 'staging',
@@ -159,7 +159,7 @@ test('managed-hosting validators report key contract failures', () => {
     }
   });
   const override = validateHostingControlOverride({
-    kind: 'ledra-override',
+    kind: 'cataloga-override',
     version: 1,
     tenantId: 'tnt_01HXYZABCDEFG',
     slug: 'acme',
@@ -222,7 +222,7 @@ test('managed-hosting helpers throw on invalid uniqueness inputs', () => {
   assert.throws(
     () =>
       assertValidHostingControlOverride({
-        kind: 'ledra-override',
+        kind: 'cataloga-override',
         version: 1,
         tenantId: 'tnt_01HXYZABCDEFG',
         slug: 'acme',
@@ -243,7 +243,7 @@ test('managed-hosting helpers throw on invalid uniqueness inputs', () => {
   assert.throws(
     () =>
       assertValidHostingControlOverride({
-        kind: 'ledra-override',
+        kind: 'cataloga-override',
         version: 1,
         tenantId: 'tnt_01HXYZABCDEFG',
         slug: 'acme',

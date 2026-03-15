@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { LedraBundle } from '@ledra/types';
+import type { CatalogaBundle } from '@cataloga/types';
 import { Route, Routes } from 'react-router-dom';
 import { loadBundleFromUrl, DEFAULT_BUNDLE_PATH } from './index';
 import { AppLayout } from './components/AppLayout';
@@ -13,7 +13,7 @@ import './styles.css';
 type AppState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
-  | { status: 'ready'; bundlePath: string; bundle: LedraBundle };
+  | { status: 'ready'; bundlePath: string; bundle: CatalogaBundle };
 
 const LoadingScreen = () => (
   <main className="mx-auto flex min-h-screen w-full max-w-[900px] items-center px-4 py-10 sm:px-6 lg:px-8">

@@ -17,16 +17,16 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@ledra/types": ["packages/types/src/index.ts"],
-      "@ledra/schemas": ["packages/schemas/src/index.ts"],
-      "@ledra/core": ["packages/core/src/index.ts"],
-      "@ledra/validator": ["packages/validator/src/index.ts"],
-      "@ledra/bundle": ["packages/bundle/src/index.ts"],
-      "@ledra/search": ["packages/search/src/index.ts"],
-      "@ledra/renderer": ["packages/renderer/src/index.ts"],
-      "@ledra/sample-data": ["packages/sample-data/src/index.ts"],
-      "@ledra/managed-hosting": ["packages/managed-hosting/src/index.ts"],
-      "@ledra/api": ["apps/api/src/index.ts"]
+      "@cataloga/types": ["packages/types/src/index.ts"],
+      "@cataloga/schemas": ["packages/schemas/src/index.ts"],
+      "@cataloga/core": ["packages/core/src/index.ts"],
+      "@cataloga/validator": ["packages/validator/src/index.ts"],
+      "@cataloga/bundle": ["packages/bundle/src/index.ts"],
+      "@cataloga/search": ["packages/search/src/index.ts"],
+      "@cataloga/renderer": ["packages/renderer/src/index.ts"],
+      "@cataloga/sample-data": ["packages/sample-data/src/index.ts"],
+      "@cataloga/managed-hosting": ["packages/managed-hosting/src/index.ts"],
+      "@cataloga/api": ["apps/api/src/index.ts"]
     },
     "typeRoots": ["./types", "./node_modules/@types"]
   }

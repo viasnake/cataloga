@@ -1,5 +1,5 @@
 {
-  "name": "@ledra/validator",
+  "name": "@cataloga/validator",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,8 +12,8 @@
   },
   "exports": "./dist/validator/src/index.js",
   "dependencies": {
-    "@ledra/core": "0.1.0",
-    "@ledra/schemas": "0.1.0",
-    "@ledra/types": "0.1.0"
+    "@cataloga/core": "0.1.0",
+    "@cataloga/schemas": "0.1.0",
+    "@cataloga/types": "0.1.0"
   }
 }

@@ -1,22 +1,22 @@
 {
-  "name": "@ledra/workspace",
+  "name": "@cataloga/workspace",
   "private": true,
   "version": "0.1.0",
-  "description": "Ledra monorepo workspace",
+  "description": "Cataloga monorepo workspace",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace @ledra/types && npm run build --workspace @ledra/schemas && npm run build --workspace @ledra/core && npm run build --workspace @ledra/validator && npm run build --workspace @ledra/bundle && npm run build --workspace @ledra/search && npm run build --workspace @ledra/managed-hosting && npm run build --workspace @ledra/renderer && npm run build --workspace @ledra/sample-data && npm run build --workspace @ledra/api && npm run build --workspace @ledra/cli && npm run build --workspace @ledra/web",
-    "ledra": "npm exec --workspace @ledra/cli ledra --",
+    "build": "npm run build --workspace @cataloga/types && npm run build --workspace @cataloga/schemas && npm run build --workspace @cataloga/core && npm run build --workspace @cataloga/validator && npm run build --workspace @cataloga/bundle && npm run build --workspace @cataloga/search && npm run build --workspace @cataloga/managed-hosting && npm run build --workspace @cataloga/renderer && npm run build --workspace @cataloga/sample-data && npm run build --workspace @cataloga/api && npm run build --workspace @cataloga/cli && npm run build --workspace @cataloga/web",
+    "cataloga": "npm exec --workspace @cataloga/cli cataloga --",
     "lint": "eslint . --ext .ts,.tsx,.mts,.cts",
     "package:cloudflare": "node scripts/package-cloudflare.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run build && node --test tests/*.test.mjs",
-    "test:e2e:web": "npm run build && npm exec --workspace @ledra/cli ledra -- export --registry packages/sample-data/registry --out apps/web/dist/bundle.json > /dev/null && node scripts/run-playwright.mjs",
+    "test:e2e:web": "npm run build && npm exec --workspace @cataloga/cli cataloga -- export --registry packages/sample-data/registry --out apps/web/dist/bundle.json > /dev/null && node scripts/run-playwright.mjs",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run test:e2e:web"
   },
   "devDependencies": {

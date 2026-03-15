@@ -7,7 +7,7 @@ import {
 } from '../packages/managed-hosting/dist/index.js';
 
 const makeOverride = (kind) => ({
-  kind: 'ledra-override',
+  kind: 'cataloga-override',
   version: 1,
   tenantId: 'tnt_01HXYZABCDEFG',
   slug: 'acme',

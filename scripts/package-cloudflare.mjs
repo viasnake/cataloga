@@ -156,7 +156,7 @@ export const buildCloudflareMetadata = ({
   ref,
   commitSha
 }) => ({
-  product: 'Ledra',
+  product: 'Cataloga',
   metadataSchemaVersion: 2,
   deploymentVersion,
   generatedAt,

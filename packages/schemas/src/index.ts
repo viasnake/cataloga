@@ -2,9 +2,9 @@ import {
   BUILTIN_ENTITY_TYPES,
   IMPLEMENTATION_ORDER,
   type BuiltinEntityTypeName
-} from '@ledra/types';
+} from '@cataloga/types';
 
-export const packageName = '@ledra/schemas';
+export const packageName = '@cataloga/schemas';
 
 export const REGISTRY_LAYOUT = {
   rootDirectory: 'registry',

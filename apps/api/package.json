@@ -1,5 +1,5 @@
 {
-  "name": "@ledra/api",
+  "name": "@cataloga/api",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,10 +12,10 @@
   },
   "exports": "./dist/apps/api/src/index.js",
   "dependencies": {
-    "@ledra/bundle": "0.1.0",
-    "@ledra/core": "0.1.0",
-    "@ledra/schemas": "0.1.0",
-    "@ledra/search": "0.1.0",
-    "@ledra/validator": "0.1.0"
+    "@cataloga/bundle": "0.1.0",
+    "@cataloga/core": "0.1.0",
+    "@cataloga/schemas": "0.1.0",
+    "@cataloga/search": "0.1.0",
+    "@cataloga/validator": "0.1.0"
   }
 }

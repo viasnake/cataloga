@@ -1,14 +1,14 @@
-import { searchEntities } from '@ledra/search';
-import { VIEWER_POLICY } from '@ledra/schemas';
+import { searchEntities } from '@cataloga/search';
+import { VIEWER_POLICY } from '@cataloga/schemas';
 import type {
   EntityRecord,
-  LedraBundle,
+  CatalogaBundle,
   RegistryGraph,
   RelationRecord,
   ViewRecord
-} from '@ledra/types';
+} from '@cataloga/types';
 
-export const appName = '@ledra/web';
+export const appName = '@cataloga/web';
 export const DEFAULT_BUNDLE_PATH = '/bundle.json';
 export const viewerMode = VIEWER_POLICY.mode;
 
@@ -59,7 +59,7 @@ export const getSelectedView = (
 ): ViewRecord | undefined => graph.views.find((view) => view.id === viewId);
 
 export const getEntityById = (
-  bundle: LedraBundle,
+  bundle: CatalogaBundle,
   entityId: string | undefined
 ): EntityRecord | undefined => {
   if (!entityId) {
@@ -70,7 +70,7 @@ export const getEntityById = (
 };
 
 export const filterEntitiesForViewer = (
-  bundle: LedraBundle,
+  bundle: CatalogaBundle,
   searchText: string,
   selectedViewId?: string
 ): FilteredViewState => {
@@ -95,7 +95,7 @@ export const filterEntitiesForViewer = (
 };
 
 export const getEntityRelations = (
-  bundle: LedraBundle,
+  bundle: CatalogaBundle,
   entityId: string
 ): readonly EntityRelationEntry[] => {
   return bundle.graph.relations.flatMap((relation): readonly EntityRelationEntry[] => {
@@ -123,7 +123,7 @@ export const getEntityRelations = (
   });
 };
 
-export const getRelationDegreeMap = (bundle: LedraBundle): ReadonlyMap<string, number> => {
+export const getRelationDegreeMap = (bundle: CatalogaBundle): ReadonlyMap<string, number> => {
   const counts = new Map<string, number>();
 
   for (const relation of bundle.graph.relations) {
@@ -135,7 +135,7 @@ export const getRelationDegreeMap = (bundle: LedraBundle): ReadonlyMap<string, n
 };
 
 export const buildGraphOverviewData = (
-  bundle: LedraBundle,
+  bundle: CatalogaBundle,
   options?: {
     maxNodes?: number;
     maxEdges?: number;
@@ -182,7 +182,7 @@ export const buildGraphOverviewData = (
   };
 };
 
-export const loadBundleFromUrl = async (bundlePath = DEFAULT_BUNDLE_PATH): Promise<LedraBundle> => {
+export const loadBundleFromUrl = async (bundlePath = DEFAULT_BUNDLE_PATH): Promise<CatalogaBundle> => {
   const response = await fetch(bundlePath, {
     headers: {
       accept: 'application/json'
@@ -193,5 +193,5 @@ export const loadBundleFromUrl = async (bundlePath = DEFAULT_BUNDLE_PATH): Promi
     throw new Error(`Failed to load bundle from '${bundlePath}' (${response.status})`);
   }
 
-  return (await response.json()) as LedraBundle;
+  return (await response.json()) as CatalogaBundle;
 };

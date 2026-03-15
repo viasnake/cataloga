@@ -1,8 +1,8 @@
 # Managed hosting architecture
 
-This document defines the target architecture for Ledra managed hosting.
+This document defines the target architecture for Cataloga managed hosting.
 
-The goal is to keep customer data separated from Ledra runtime code while making onboarding and routine
+The goal is to keep customer data separated from Cataloga runtime code while making onboarding and routine
 deployment as automated as possible.
 
 ## Goals
@@ -16,7 +16,7 @@ deployment as automated as possible.
 
 ## Non-goals
 
-- editing customer repositories from the Ledra platform
+- editing customer repositories from the Cataloga platform
 - runtime reads from GitHub during request handling
 - customer-owned Cloudflare credentials in the primary product path
 - preview environments in the initial production milestone
@@ -29,7 +29,7 @@ deployment as automated as possible.
 - `DB for operational state`: jobs, locks, webhook deliveries, observed deploy health, and subscription
   status live in the control-plane database.
 - `Commit-pinned deploys`: every deployment is tied to an exact customer repo commit, control repo commit,
-  and Ledra platform version.
+  and Cataloga platform version.
 - `Explicit overrides`: any manual operator action must be recorded in Git, mirrored in operational state,
   and reflected in deployment metadata.
 - `Strict uniqueness`: tenant slug, repository binding, hostname, and Cloudflare target conflicts are
@@ -39,7 +39,7 @@ deployment as automated as possible.
 
 ### Customer repository
 
-Customer repositories are customer-owned and contain Ledra registry data under `registry/` plus a minimal
+Customer repositories are customer-owned and contain Cataloga registry data under `registry/` plus a minimal
 tenant manifest.
 
 The platform reads these repositories through a GitHub App installation and never writes back to them.
@@ -146,7 +146,7 @@ Customer repositories must provide `registry/` and a minimal manifest.
 Recommended manifest:
 
 ```yaml
-kind: ledra-tenant
+kind: cataloga-tenant
 version: 1
 
 tenant:
@@ -165,7 +165,7 @@ Customer manifests must not contain:
 - Cloudflare account details
 - operator credentials
 - billing information
-- Ledra runtime version pinning
+- Cataloga runtime version pinning
 - override flags
 
 ## Hosting-control contract
@@ -201,7 +201,7 @@ github:
   repositoryNodeId: R_kgDOExample
 
 engine:
-  ledraVersion: v0.2.0
+  catalogaVersion: v0.2.0
 
 deployment:
   environment: production
@@ -293,7 +293,7 @@ Target shape:
 
 ```json
 {
-  "product": "Ledra",
+  "product": "Cataloga",
   "metadataSchemaVersion": 3,
   "tenant": {
     "id": "tnt_01HXYZABCDEFG",
@@ -301,7 +301,7 @@ Target shape:
   },
   "engine": {
     "version": "v0.2.0",
-    "repo": "viasnake/ledra",
+    "repo": "viasnake/cataloga",
     "commitSha": "..."
   },
   "data": {

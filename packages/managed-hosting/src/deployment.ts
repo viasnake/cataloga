@@ -18,7 +18,7 @@ export type TenantArtifactManifest = {
 };
 
 export type DeploymentMetadataV3 = {
-  product: 'Ledra';
+  product: 'Cataloga';
   metadataSchemaVersion: 3;
   deploymentVersion: string;
   generatedAt: string;

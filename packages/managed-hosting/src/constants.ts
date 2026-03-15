@@ -1,4 +1,4 @@
-export const packageName = '@ledra/managed-hosting';
+export const packageName = '@cataloga/managed-hosting';
 
 export const TENANT_LIFECYCLE_STATES = [
   'pending',

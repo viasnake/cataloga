@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
-import type { LedraBundle } from '@ledra/types';
+import type { CatalogaBundle } from '@cataloga/types';
 
 export type ViewerContextValue = {
-  bundle: LedraBundle;
+  bundle: CatalogaBundle;
   bundlePath: string;
 };
 

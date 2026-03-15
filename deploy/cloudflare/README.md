@@ -2,7 +2,7 @@
 
 This directory targets the recommended single-repository Cloudflare deployment model.
 
-Use one deployment repository, usually a fork of Ledra, that keeps runtime code, `registry/`, and GitHub
+Use one deployment repository, usually a fork of Cataloga, that keeps runtime code, `registry/`, and GitHub
 Actions workflows together.
 
 For the managed-hosting product path where customer data stays in separate repositories and operator-owned
@@ -24,7 +24,7 @@ The Cloudflare runtime serves only packaged assets and read-only API responses.
 
 Use this flow when validating the Cloudflare package locally inside the deployment repository.
 
-### 1) Build Ledra
+### 1) Build Cataloga
 
 ```bash
 mise install
@@ -45,11 +45,11 @@ cp -R examples/minimal-registry/. ./.local/registry-data/
 
 ```bash
 mkdir -p .artifacts/cloudflare
-npm exec --workspace @ledra/cli ledra -- export --registry ./.local/registry-data --out .artifacts/cloudflare/bundle.json
+npm exec --workspace @cataloga/cli cataloga -- export --registry ./.local/registry-data --out .artifacts/cloudflare/bundle.json
 node scripts/package-cloudflare.mjs \
   --bundle .artifacts/cloudflare/bundle.json \
   --out deploy/cloudflare/public \
-  --repo "local/example-ledra" \
+  --repo "local/example-cataloga" \
   --ref "refs/heads/main" \
   --commit "$(git rev-parse HEAD)" \
   --registry-path "registry"
@@ -75,7 +75,7 @@ Production should be driven from the deployment repository itself.
 
 Template workflows live under `deploy/cloudflare/workflows/`.
 
-For this repository's built-in demo site, use `.github/workflows/ledra-demo-production.yml`. It packages
+For this repository's built-in demo site, use `.github/workflows/cataloga-demo-production.yml`. It packages
 `packages/sample-data/registry` and deploys it as a read-only Cloudflare demo.
 
 Preview deploys are intentionally limited to trusted same-repository PRs. Secret-bearing deploy jobs should

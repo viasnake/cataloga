@@ -1,6 +1,6 @@
 # Bundle format
 
-`ledra build` and `ledra export` produce a static bundle that the viewer can load without a live API.
+`cataloga build` and `cataloga export` produce a static bundle that the viewer can load without a live API.
 
 ## Top-level structure
 

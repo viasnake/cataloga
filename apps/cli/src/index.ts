@@ -14,13 +14,13 @@ declare const process:
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildBundle } from '@ledra/bundle';
-import { loadRegistryFromFs } from '@ledra/core';
-import { createHttpEntrypoint } from '@ledra/api';
-import { searchEntities, type SearchQueryInput } from '@ledra/search';
-import { validateRegistry } from '@ledra/validator';
+import { buildBundle } from '@cataloga/bundle';
+import { loadRegistryFromFs } from '@cataloga/core';
+import { createHttpEntrypoint } from '@cataloga/api';
+import { searchEntities, type SearchQueryInput } from '@cataloga/search';
+import { validateRegistry } from '@cataloga/validator';
 
-export const appName = '@ledra/cli';
+export const appName = '@cataloga/cli';
 export const cliVersion = '0.1.0';
 
 export type CliCommand = 'validate' | 'build' | 'serve' | 'inspect' | 'export';
@@ -36,7 +36,7 @@ type ParsedArgs = {
 const DEFAULT_REGISTRY_ROOT = 'packages/sample-data/registry';
 const DEFAULT_PORT = 3000;
 const usage = [
-  'Usage: ledra <validate|build|serve|inspect|export> [--registry <path>] [--out <path>] [--query <text|json>] [--port <number>]',
+  'Usage: cataloga <validate|build|serve|inspect|export> [--registry <path>] [--out <path>] [--query <text|json>] [--port <number>]',
   '',
   'Commands:',
   '  validate  Validate registry graph and diagnostics',
@@ -148,7 +148,7 @@ const loadRegistryState = (registryRoot: string) => {
   };
 };
 
-export const runLedraCli = (args: readonly string[]): string => {
+export const runCatalogaCli = (args: readonly string[]): string => {
   if (args.includes('--help') || args.includes('-h')) {
     return usage;
   }
@@ -197,7 +197,7 @@ export const runLedraCli = (args: readonly string[]): string => {
           readOnly: true,
           registryRoot,
           port: parsed.port ?? parsePort(process?.env.PORT) ?? DEFAULT_PORT,
-          status: 'Starting read-only HTTP server via @ledra/api.'
+          status: 'Starting read-only HTTP server via @cataloga/api.'
         },
         null,
         2
@@ -207,7 +207,7 @@ export const runLedraCli = (args: readonly string[]): string => {
   }
 };
 
-export const startLedraServe = async (args: readonly string[]) => {
+export const startCatalogaServe = async (args: readonly string[]) => {
   const parsed = parseArgs(args);
   const registryRoot = resolveRegistryRoot(parsed.registryRoot);
   const port = parsed.port ?? parsePort(process?.env.PORT) ?? DEFAULT_PORT;
@@ -222,7 +222,7 @@ export const startLedraServe = async (args: readonly string[]) => {
 
 const isExecutedAsEntrypoint =
   typeof process !== 'undefined' &&
-  process.env.LEDRA_CLI_EMBEDDED !== '1' &&
+  process.env.CATALOGA_CLI_EMBEDDED !== '1' &&
   process.argv[1] !== undefined &&
   resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -231,7 +231,7 @@ if (isExecutedAsEntrypoint) {
   const parsed = parseArgs(args);
 
   if (parsed.command === 'serve') {
-    void startLedraServe(args)
+    void startCatalogaServe(args)
       .then(({ port, registryRoot }) => {
         console.log(
           JSON.stringify({ readOnly: true, port, registryRoot, status: 'Listening' }, null, 2)
@@ -243,6 +243,6 @@ if (isExecutedAsEntrypoint) {
         console.error(message);
       });
   } else {
-    console.log(runLedraCli(args));
+    console.log(runCatalogaCli(args));
   }
 }

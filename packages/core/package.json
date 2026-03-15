@@ -1,5 +1,5 @@
 {
-  "name": "@ledra/core",
+  "name": "@cataloga/core",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
   },
   "exports": "./dist/core/src/index.js",
   "dependencies": {
-    "@ledra/types": "0.1.0",
+    "@cataloga/types": "0.1.0",
     "js-yaml": "^4.1.0"
   }
 }

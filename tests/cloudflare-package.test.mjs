@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { createCloudflarePackage } from '../scripts/package-cloudflare.mjs';
 
 test('Cloudflare packaging writes viewer assets, bundle, and metadata', () => {
-  const tempDir = mkdtempSync(join(tmpdir(), 'ledra-cloudflare-package-'));
+  const tempDir = mkdtempSync(join(tmpdir(), 'cataloga-cloudflare-package-'));
   const bundlePath = join(tempDir, 'bundle.json');
   const outDir = join(tempDir, 'public');
 
@@ -42,7 +42,7 @@ test('Cloudflare packaging writes viewer assets, bundle, and metadata', () => {
       viewerDir: 'apps/web/dist',
       bundlePath,
       outDir,
-      repo: 'example/home-ledra',
+      repo: 'example/home-cataloga',
       ref: 'refs/heads/main',
       commitSha: 'abcdef123456abcdef123456abcdef123456abcd',
       generatedAt: '2026-03-14T12:00:00.000Z'
@@ -54,7 +54,7 @@ test('Cloudflare packaging writes viewer assets, bundle, and metadata', () => {
     assert.equal(existsSync(join(outDir, 'metadata.json')), true);
     assert.equal(result.metadata.metadataSchemaVersion, 2);
     assert.equal(result.metadata.bundle.schemaVersion, 1);
-    assert.equal(result.metadata.repository.repo, 'example/home-ledra');
+    assert.equal(result.metadata.repository.repo, 'example/home-cataloga');
     assert.equal(result.metadata.repository.ref, 'refs/heads/main');
 
     const metadata = JSON.parse(readFileSync(join(outDir, 'metadata.json'), 'utf8'));

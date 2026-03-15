@@ -1,6 +1,6 @@
 # Data repository structure
 
-Ledra reads a canonical `registry/` tree from a Git-managed data repository.
+Cataloga reads a canonical `registry/` tree from a Git-managed data repository.
 
 ## Canonical layout
 
@@ -37,7 +37,7 @@ registry/
 
 - `registry/entities`, `registry/relations`, `registry/views`, and `registry/policies` are required.
 - Each record must live in exactly one file.
-- Ledra reads `.json`, `.yaml`, and `.yml` files recursively.
+- Cataloga reads `.json`, `.yaml`, and `.yml` files recursively.
 - `sourceFilePath` is preserved for diagnostics and viewer/API output.
 
 ## Record guidance

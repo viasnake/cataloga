@@ -1,6 +1,6 @@
 # Managed hosting operational model
 
-This document defines the M2 operational model for Ledra managed hosting.
+This document defines the M2 operational model for Cataloga managed hosting.
 
 It binds the Git-backed desired state from `hosting-control` to the execution state stored in the control
 plane database.

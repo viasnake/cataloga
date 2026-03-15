@@ -1,6 +1,6 @@
 # Self-host guide
 
-This guide shows how to run Ledra against a Git-managed registry repository.
+This guide shows how to run Cataloga against a Git-managed registry repository.
 
 ## Requirements
 
@@ -40,15 +40,15 @@ cd ../..
 ## 3) Validate, inspect, and build
 
 ```bash
-npm exec --workspace @ledra/cli ledra -- validate --registry ./.local/registry-data
-npm exec --workspace @ledra/cli ledra -- inspect --registry ./.local/registry-data --query "type=host"
-npm exec --workspace @ledra/cli ledra -- build --registry ./.local/registry-data --out ./.local/bundle.json
+npm exec --workspace @cataloga/cli cataloga -- validate --registry ./.local/registry-data
+npm exec --workspace @cataloga/cli cataloga -- inspect --registry ./.local/registry-data --query "type=host"
+npm exec --workspace @cataloga/cli cataloga -- build --registry ./.local/registry-data --out ./.local/bundle.json
 ```
 
 ## 4) Serve a read-only API
 
 ```bash
-npm exec --workspace @ledra/cli ledra -- serve --registry ./.local/registry-data --port 3000
+npm exec --workspace @cataloga/cli cataloga -- serve --registry ./.local/registry-data --port 3000
 curl http://127.0.0.1:3000/api/diagnostics
 curl http://127.0.0.1:3000/api/views
 ```
@@ -64,9 +64,9 @@ curl http://127.0.0.1:3000/api/views
 ## Cloudflare production note
 
 For Cloudflare production, the recommended model is no longer a local `wrangler deploy` from this
-repository. Use a deployment repository, usually a fork of Ledra, and run deployment from GitHub Actions.
+repository. Use a deployment repository, usually a fork of Cataloga, and run deployment from GitHub Actions.
 
-- Deployment repo: Ledra runtime, Worker, viewer, packaging script, `registry/`, and workflow templates.
+- Deployment repo: Cataloga runtime, Worker, viewer, packaging script, `registry/`, and workflow templates.
 - Runtime contract: Cloudflare serves packaged assets only. It never reads GitHub live.
 
 Use `docs/cloudflare-deployment.md` and `deploy/cloudflare/README.md` when setting up that model.

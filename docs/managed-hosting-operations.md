@@ -1,6 +1,6 @@
 # Managed hosting operations
 
-This document captures operator-facing runbooks and the production rollout path for Ledra managed hosting.
+This document captures operator-facing runbooks and the production rollout path for Cataloga managed hosting.
 
 It covers the M5 and M6 phases: visibility, drift handling, overrides, rollout, and subscription-oriented
 operations.

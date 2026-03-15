@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ledra.dev/schemas/customer-manifest.schema.json",
-  "title": "Ledra Customer Manifest",
+  "$id": "https://cataloga.dev/schemas/customer-manifest.schema.json",
+  "title": "Cataloga Customer Manifest",
   "type": "object",
   "required": ["kind", "version", "tenant", "registry"],
   "properties": {
     "kind": {
-      "const": "ledra-tenant"
+      "const": "cataloga-tenant"
     },
     "version": {
       "const": 1

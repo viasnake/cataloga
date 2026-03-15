@@ -1,16 +1,16 @@
-# Ledra
+# Cataloga
 
-Ledra is a **Git-native registry engine** that validates, searches, browses, and serves structured registry data from Git.
+Cataloga is a **Git-native registry engine** that validates, searches, browses, and serves structured registry data from Git.
 
 - **Git-native**: the registry data repository is the source of truth.
 - **Read-only by design**: CLI, API, and viewer do not mutate registry data.
-- **Static-first**: `ledra build` and `ledra export` produce portable artifacts that can be hosted without a live database.
+- **Static-first**: `cataloga build` and `cataloga export` produce portable artifacts that can be hosted without a live database.
 - **Registry-first**: IPAM is one use case, not the product boundary.
 
 ## Core workflow
 
 1. Keep registry records in a Git repository under `registry/`.
-2. Run Ledra validation and bundle build against that repo.
+2. Run Cataloga validation and bundle build against that repo.
 3. Publish generated static output and optional read-only API endpoints.
 
 ## Quickstart
@@ -19,22 +19,22 @@ Ledra is a **Git-native registry engine** that validates, searches, browses, and
 mise install
 npm install
 npm run build
-npm exec --workspace @ledra/cli ledra -- validate --registry packages/sample-data/registry
-npm exec --workspace @ledra/cli ledra -- export --registry packages/sample-data/registry --out apps/web/dist/bundle.json
+npm exec --workspace @cataloga/cli cataloga -- validate --registry packages/sample-data/registry
+npm exec --workspace @cataloga/cli cataloga -- export --registry packages/sample-data/registry --out apps/web/dist/bundle.json
 ```
 
-Ledra development targets Node.js 20.x. If you use `mise`, the repository-local `mise.toml` installs the expected runtime.
+Cataloga development targets Node.js 20.x. If you use `mise`, the repository-local `mise.toml` installs the expected runtime.
 
 Then open `apps/web/dist/index.html` with a static file server and browse the generated registry bundle.
 
 ## Cloudflare deployment model
 
-Ledra now distinguishes two Cloudflare paths:
+Cataloga now distinguishes two Cloudflare paths:
 
 1. `Managed hosting`: the recommended product path. Customers keep a Git repository with `registry/` as
-   the source of truth. Ledra reads that repository through a GitHub App and deploys packaged assets from
+   the source of truth. Cataloga reads that repository through a GitHub App and deploys packaged assets from
    operator-owned Cloudflare infrastructure.
-2. `Direct self-host deployment`: a lower-level path for teams that want to run Ledra on their own
+2. `Direct self-host deployment`: a lower-level path for teams that want to run Cataloga on their own
    Cloudflare account.
 
 Both paths keep Cloudflare runtime read-only and package-based. Cloudflare serves built assets,

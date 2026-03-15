@@ -9,14 +9,14 @@ declare const process:
     }
   | undefined;
 
-import { loadRegistryFromFs } from '@ledra/core';
-import { searchEntities, type SearchQueryInput } from '@ledra/search';
-import { API_ENDPOINTS } from '@ledra/schemas';
-import type { BuiltinEntityTypeName } from '@ledra/types';
-import { validateRegistry } from '@ledra/validator';
+import { loadRegistryFromFs } from '@cataloga/core';
+import { searchEntities, type SearchQueryInput } from '@cataloga/search';
+import { API_ENDPOINTS } from '@cataloga/schemas';
+import type { BuiltinEntityTypeName } from '@cataloga/types';
+import { validateRegistry } from '@cataloga/validator';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 
-export const appName = '@ledra/api';
+export const appName = '@cataloga/api';
 
 const DEFAULT_REGISTRY_ROOT = 'packages/sample-data/registry';
 
@@ -159,7 +159,7 @@ export const createHttpEntrypoint = (registryRoot = DEFAULT_REGISTRY_ROOT) => {
 };
 
 if (typeof process !== 'undefined' && process.argv[1]) {
-  const registryRoot = process.env.LEDRA_REGISTRY_DIR ?? DEFAULT_REGISTRY_ROOT;
+  const registryRoot = process.env.CATALOGA_REGISTRY_DIR ?? DEFAULT_REGISTRY_ROOT;
   const port = Number.parseInt(process.env.PORT ?? '3000', 10);
 
   if (process.argv[1].endsWith('/apps/api/src/index.js')) {

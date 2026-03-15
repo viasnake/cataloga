@@ -12,17 +12,17 @@ if (process.env.INIT_CWD) {
 }
 
 if (!existsSync(cliEntrypoint)) {
-  console.error('Ledra CLI is not built yet. Run `npm run build` first.');
+  console.error('Cataloga CLI is not built yet. Run `npm run build` first.');
   process.exit(1);
 }
 
-process.env.LEDRA_CLI_EMBEDDED = '1';
-const { runLedraCli, startLedraServe } = await import(pathToFileURL(cliEntrypoint).href);
+process.env.CATALOGA_CLI_EMBEDDED = '1';
+const { runCatalogaCli, startCatalogaServe } = await import(pathToFileURL(cliEntrypoint).href);
 const args = process.argv.slice(2);
 
 if (args[0] === 'serve') {
   try {
-    const { port, registryRoot } = await startLedraServe(args);
+    const { port, registryRoot } = await startCatalogaServe(args);
     console.log(
       JSON.stringify({ readOnly: true, port, registryRoot, status: 'Listening' }, null, 2)
     );
@@ -32,5 +32,5 @@ if (args[0] === 'serve') {
     process.exit(1);
   }
 } else {
-  console.log(runLedraCli(args));
+  console.log(runCatalogaCli(args));
 }

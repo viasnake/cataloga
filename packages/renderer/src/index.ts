@@ -1,1 +1,1 @@
-export const packageName = '@ledra/renderer';
+export const packageName = '@cataloga/renderer';

@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ledra.dev/schemas/hosting-control-override.schema.json",
-  "title": "Ledra Hosting Control Override",
+  "$id": "https://cataloga.dev/schemas/hosting-control-override.schema.json",
+  "title": "Cataloga Hosting Control Override",
   "type": "object",
   "required": ["kind", "version", "tenantId", "slug", "override"],
   "properties": {
     "kind": {
-      "const": "ledra-override"
+      "const": "cataloga-override"
     },
     "version": {
       "const": 1

@@ -1,4 +1,4 @@
-name: ledra-preview
+name: cataloga-preview
 
 on:
   pull_request:
@@ -9,8 +9,8 @@ permissions:
   pull-requests: write
 
 env:
-  LEDRA_REGISTRY_PATH: registry
-  CLOUDFLARE_WORKER_BASENAME: ledra-registry
+  CATALOGA_REGISTRY_PATH: registry
+  CLOUDFLARE_WORKER_BASENAME: cataloga-registry
 
 jobs:
   build-preview:
@@ -39,10 +39,10 @@ jobs:
         run: npm test
 
       - name: Validate registry data
-        run: npm exec --workspace @ledra/cli ledra -- validate --registry "${{ github.workspace }}/${{ env.LEDRA_REGISTRY_PATH }}"
+        run: npm exec --workspace @cataloga/cli cataloga -- validate --registry "${{ github.workspace }}/${{ env.CATALOGA_REGISTRY_PATH }}"
 
       - name: Export bundle
-        run: npm exec --workspace @ledra/cli ledra -- export --registry "${{ github.workspace }}/${{ env.LEDRA_REGISTRY_PATH }}" --out ".artifacts/cloudflare/bundle.json"
+        run: npm exec --workspace @cataloga/cli cataloga -- export --registry "${{ github.workspace }}/${{ env.CATALOGA_REGISTRY_PATH }}" --out ".artifacts/cloudflare/bundle.json"
 
       - name: Resolve preview worker name
         id: worker-name
@@ -58,12 +58,12 @@ jobs:
           --repo "${{ github.repository }}"
           --ref "refs/heads/${{ github.event.pull_request.head.ref }}"
           --commit "${{ github.event.pull_request.head.sha }}"
-          --registry-path "${{ env.LEDRA_REGISTRY_PATH }}"
+          --registry-path "${{ env.CATALOGA_REGISTRY_PATH }}"
 
       - name: Upload packaged assets
         uses: actions/upload-artifact@v4
         with:
-          name: ledra-preview-package
+          name: cataloga-preview-package
           path: deploy/cloudflare/public
 
   deploy-preview:
@@ -80,7 +80,7 @@ jobs:
       - name: Download packaged assets
         uses: actions/download-artifact@v4
         with:
-          name: ledra-preview-package
+          name: cataloga-preview-package
           path: deploy/cloudflare/public
 
       - name: Render preview Wrangler config
@@ -105,7 +105,7 @@ jobs:
             const workerName = `${process.env.CLOUDFLARE_WORKER_BASENAME}-pr-${context.payload.pull_request.number}`;
             const previewUrl = `https://${workerName}.${process.env.CLOUDFLARE_ACCOUNT_SUBDOMAIN}.workers.dev`;
             const body = [
-              'Ledra preview deployed.',
+              'Cataloga preview deployed.',
               '',
               `- URL: ${previewUrl}`,
               `- Repository: ${context.repo.owner}/${context.repo.repo}`,

@@ -30,7 +30,7 @@ export const OverviewPage = () => {
                 ネットワーク全体を、関係性から読む。
               </h1>
               <p className="max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
-                Ledra は静的 bundle をそのまま公開しつつ、ノード、関係、スコープを落ち着いて読める
+                Cataloga は静的 bundle をそのまま公開しつつ、ノード、関係、スコープを落ち着いて読める
                 viewer として提示します。 導入コピーではなく、実際の利用画面そのものを入口にします。
               </p>
             </div>

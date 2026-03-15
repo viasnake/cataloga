@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { EntityRecord } from '@ledra/types';
+import type { EntityRecord } from '@cataloga/types';
 import type { EntityRelationEntry } from '../index';
 import { cn } from '../lib/cn';
 import { formatEntityTypeLabel, uiCopy } from '../copy';
@@ -113,14 +113,14 @@ export const RelationGraph = ({
         viewBox="0 0 820 480"
       >
         <defs>
-          <radialGradient id="ledra-center-glow" cx="50%" cy="50%" r="70%">
+          <radialGradient id="cataloga-center-glow" cx="50%" cy="50%" r="70%">
             <stop offset="0%" stopColor="#dbeafe" stopOpacity="0.95" />
             <stop offset="100%" stopColor="#bfdbfe" stopOpacity="0.15" />
           </radialGradient>
         </defs>
 
         <g opacity="0.9">
-          <circle cx="410" cy="240" r="102" fill="url(#ledra-center-glow)" />
+          <circle cx="410" cy="240" r="102" fill="url(#cataloga-center-glow)" />
           <circle cx="410" cy="240" r="124" fill="none" stroke="#dbeafe" strokeDasharray="6 10" />
         </g>
 

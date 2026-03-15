@@ -4,19 +4,19 @@ import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createReadOnlyApi } from '../apps/api/dist/apps/api/src/index.js';
-import { runLedraCli } from '../apps/cli/dist/apps/cli/src/index.js';
+import { runCatalogaCli } from '../apps/cli/dist/apps/cli/src/index.js';
 
 const registryPath = 'packages/sample-data/registry';
 
 const runCli = (args) => {
-  const output = runLedraCli(args);
+  const output = runCatalogaCli(args);
   return JSON.parse(output);
 };
 
-test('workspace ledra command exposes help output', () => {
-  const output = runLedraCli(['--help']);
+test('workspace cataloga command exposes help output', () => {
+  const output = runCatalogaCli(['--help']);
 
-  assert.match(output, /Usage: ledra/u);
+  assert.match(output, /Usage: cataloga/u);
   assert.match(output, /validate/u);
 });
 
@@ -30,7 +30,7 @@ test('web build outputs static viewer assets', () => {
   assert.ok(assetFiles.some((fileName) => fileName.endsWith('.css')));
 });
 
-test('ledra validate succeeds with sample registry graph', () => {
+test('cataloga validate succeeds with sample registry graph', () => {
   const result = runCli(['validate', '--registry', registryPath]);
 
   assert.equal(result.validation.ok, true);
@@ -43,8 +43,8 @@ test('ledra validate succeeds with sample registry graph', () => {
   });
 });
 
-test('ledra build outputs a static bundle and writes --out', () => {
-  const tempDir = mkdtempSync(join(tmpdir(), 'ledra-build-'));
+test('cataloga build outputs a static bundle and writes --out', () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'cataloga-build-'));
   const outPath = join(tempDir, 'bundle.json');
 
   try {
@@ -91,7 +91,7 @@ test('inspect supports structured query input over attributes', () => {
 });
 
 test('export writes a bundle file when --out is provided', () => {
-  const tempDir = mkdtempSync(join(tmpdir(), 'ledra-export-'));
+  const tempDir = mkdtempSync(join(tmpdir(), 'cataloga-export-'));
   const outPath = join(tempDir, 'bundle.json');
 
   try {

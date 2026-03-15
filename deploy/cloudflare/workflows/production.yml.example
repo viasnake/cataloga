@@ -1,4 +1,4 @@
-name: ledra-production
+name: cataloga-production
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 env:
-  LEDRA_REGISTRY_PATH: registry
+  CATALOGA_REGISTRY_PATH: registry
 
 jobs:
   build-production:
@@ -33,10 +33,10 @@ jobs:
         run: npm test
 
       - name: Validate registry data
-        run: npm exec --workspace @ledra/cli ledra -- validate --registry "${{ github.workspace }}/${{ env.LEDRA_REGISTRY_PATH }}"
+        run: npm exec --workspace @cataloga/cli cataloga -- validate --registry "${{ github.workspace }}/${{ env.CATALOGA_REGISTRY_PATH }}"
 
       - name: Export bundle
-        run: npm exec --workspace @ledra/cli ledra -- export --registry "${{ github.workspace }}/${{ env.LEDRA_REGISTRY_PATH }}" --out ".artifacts/cloudflare/bundle.json"
+        run: npm exec --workspace @cataloga/cli cataloga -- export --registry "${{ github.workspace }}/${{ env.CATALOGA_REGISTRY_PATH }}" --out ".artifacts/cloudflare/bundle.json"
 
       - name: Package Cloudflare assets
         run: >-
@@ -46,12 +46,12 @@ jobs:
           --repo "${{ github.repository }}"
           --ref "${{ github.ref }}"
           --commit "${{ github.sha }}"
-          --registry-path "${{ env.LEDRA_REGISTRY_PATH }}"
+          --registry-path "${{ env.CATALOGA_REGISTRY_PATH }}"
 
       - name: Upload packaged assets
         uses: actions/upload-artifact@v4
         with:
-          name: ledra-production-package
+          name: cataloga-production-package
           path: deploy/cloudflare/public
 
   deploy-production:
@@ -65,7 +65,7 @@ jobs:
       - name: Download packaged assets
         uses: actions/download-artifact@v4
         with:
-          name: ledra-production-package
+          name: cataloga-production-package
           path: deploy/cloudflare/public
 
       - name: Copy production Wrangler config

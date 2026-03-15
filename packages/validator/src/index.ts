@@ -1,5 +1,5 @@
-import type { ReadOnlyRepository } from '@ledra/core';
-import { BUILTIN_ENTITY_SCHEMAS } from '@ledra/schemas';
+import type { ReadOnlyRepository } from '@cataloga/core';
+import { BUILTIN_ENTITY_SCHEMAS } from '@cataloga/schemas';
 import type {
   BuiltinEntityTypeName,
   Diagnostic,
@@ -10,9 +10,9 @@ import type {
   RelationRecord,
   ValidationResult,
   ViewRecord
-} from '@ledra/types';
+} from '@cataloga/types';
 
-export const packageName = '@ledra/validator';
+export const packageName = '@cataloga/validator';
 
 type EntityReferenceRule = {
   field: string;

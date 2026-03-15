@@ -1,4 +1,4 @@
-import type { BuiltinEntityTypeName } from '@ledra/types';
+import type { BuiltinEntityTypeName } from '@cataloga/types';
 
 const entityTypeLabels: Record<BuiltinEntityTypeName, string> = {
   site: 'サイト',
@@ -13,7 +13,7 @@ const entityTypeLabels: Record<BuiltinEntityTypeName, string> = {
 
 export const uiCopy = {
   brand: {
-    title: 'Ledra',
+    title: 'Cataloga',
     subtitle: 'ネットワーク・レジストリ・ビューア'
   },
   nav: {

@@ -1,7 +1,7 @@
 import type { HostingControlOverrideKind, TenantLifecycleState } from './constants.js';
 
 export type CustomerManifest = {
-  kind: 'ledra-tenant';
+  kind: 'cataloga-tenant';
   version: 1;
   tenant: {
     slug: string;
@@ -27,7 +27,7 @@ export type HostingControlTenantManifest = {
     repositoryNodeId: string;
   };
   engine: {
-    ledraVersion: string;
+    catalogaVersion: string;
   };
   deployment: {
     environment: 'production';
@@ -112,7 +112,7 @@ export type DomainDisableOverride = OverrideEnvelopeBase &
   };
 
 export type HostingControlOverride = {
-  kind: 'ledra-override';
+  kind: 'cataloga-override';
   version: 1;
   tenantId: string;
   slug: string;

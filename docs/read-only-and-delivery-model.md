@@ -2,7 +2,7 @@
 
 ## Read-only contract
 
-Ledra CLI/API/viewer are read-only views of registry data.
+Cataloga CLI/API/viewer are read-only views of registry data.
 
 - No write endpoint is exposed.
 - Data changes happen through commits in the registry data Git repository.
@@ -13,13 +13,13 @@ Ledra CLI/API/viewer are read-only views of registry data.
 1. Validate data:
 
    ```bash
-   npm exec --workspace @ledra/cli ledra -- validate --registry <registry_repo_path>
+   npm exec --workspace @cataloga/cli cataloga -- validate --registry <registry_repo_path>
    ```
 
 2. Build/export static bundle:
 
    ```bash
-   npm exec --workspace @ledra/cli ledra -- export --registry <registry_repo_path> --out dist/bundle.json
+   npm exec --workspace @cataloga/cli cataloga -- export --registry <registry_repo_path> --out dist/bundle.json
    ```
 
 3. Serve `bundle.json` directly from static hosting or wrap the same registry in read-only API endpoints.

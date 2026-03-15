@@ -1,5 +1,5 @@
 {
-  "name": "@ledra/search",
+  "name": "@cataloga/search",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
   },
   "exports": "./dist/search/src/index.js",
   "dependencies": {
-    "@ledra/core": "0.1.0",
-    "@ledra/types": "0.1.0"
+    "@cataloga/core": "0.1.0",
+    "@cataloga/types": "0.1.0"
   }
 }

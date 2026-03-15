@@ -158,8 +158,8 @@ export const validateCustomerManifest = (value: unknown): ValidationResult<Custo
     'deployment'
   ]);
 
-  if (manifest.kind !== 'ledra-tenant') {
-    pushIssue(issues, 'manifest.kind', 'Expected ledra-tenant.');
+  if (manifest.kind !== 'cataloga-tenant') {
+    pushIssue(issues, 'manifest.kind', 'Expected cataloga-tenant.');
   }
   if (manifest.version !== 1) {
     pushIssue(issues, 'manifest.version', 'Expected version 1.');
@@ -216,7 +216,7 @@ export const validateCustomerManifest = (value: unknown): ValidationResult<Custo
   }
 
   return finishValidation(issues, {
-    kind: 'ledra-tenant',
+    kind: 'cataloga-tenant',
     version: 1,
     tenant: {
       slug,
@@ -309,10 +309,10 @@ export const validateHostingControlTenantManifest = (
       readString(github.repositoryNodeId, 'manifest.github.repositoryNodeId', issues) ?? '';
   }
 
-  let ledraVersion = '';
+  let catalogaVersion = '';
   if (engine !== undefined) {
-    readNoUnknownKeys(engine, 'manifest.engine', issues, ['ledraVersion']);
-    ledraVersion = readString(engine.ledraVersion, 'manifest.engine.ledraVersion', issues) ?? '';
+    readNoUnknownKeys(engine, 'manifest.engine', issues, ['catalogaVersion']);
+    catalogaVersion = readString(engine.catalogaVersion, 'manifest.engine.catalogaVersion', issues) ?? '';
   }
 
   let environment = 'production' as const;
@@ -379,7 +379,7 @@ export const validateHostingControlTenantManifest = (
       repositoryNodeId
     },
     engine: {
-      ledraVersion
+      catalogaVersion
     },
     deployment: {
       environment,
@@ -431,8 +431,8 @@ export const validateHostingControlOverride = (
     'override'
   ]);
 
-  if (manifest.kind !== 'ledra-override') {
-    pushIssue(issues, 'manifest.kind', 'Expected ledra-override.');
+  if (manifest.kind !== 'cataloga-override') {
+    pushIssue(issues, 'manifest.kind', 'Expected cataloga-override.');
   }
   if (manifest.version !== 1) {
     pushIssue(issues, 'manifest.version', 'Expected version 1.');
@@ -577,7 +577,7 @@ export const validateHostingControlOverride = (
   }
 
   return finishValidation(issues, {
-    kind: 'ledra-override',
+    kind: 'cataloga-override',
     version: 1,
     tenantId,
     slug,

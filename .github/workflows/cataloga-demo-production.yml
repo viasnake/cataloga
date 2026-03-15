@@ -1,4 +1,4 @@
-name: ledra-demo-production
+name: cataloga-demo-production
 
 on:
   workflow_dispatch:
@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 env:
-  LEDRA_REGISTRY_PATH: packages/sample-data/registry
-  CLOUDFLARE_WORKER_NAME: ledra-demo
+  CATALOGA_REGISTRY_PATH: packages/sample-data/registry
+  CLOUDFLARE_WORKER_NAME: cataloga-demo
 
 jobs:
   build-demo:
@@ -45,10 +45,10 @@ jobs:
           tests/managed-hosting-subscription.test.mjs
 
       - name: Validate demo registry
-        run: npm exec --workspace @ledra/cli ledra -- validate --registry "${{ github.workspace }}/${{ env.LEDRA_REGISTRY_PATH }}"
+        run: npm exec --workspace @cataloga/cli cataloga -- validate --registry "${{ github.workspace }}/${{ env.CATALOGA_REGISTRY_PATH }}"
 
       - name: Export demo bundle
-        run: npm exec --workspace @ledra/cli ledra -- export --registry "${{ github.workspace }}/${{ env.LEDRA_REGISTRY_PATH }}" --out ".artifacts/cloudflare/bundle.json"
+        run: npm exec --workspace @cataloga/cli cataloga -- export --registry "${{ github.workspace }}/${{ env.CATALOGA_REGISTRY_PATH }}" --out ".artifacts/cloudflare/bundle.json"
 
       - name: Package Cloudflare assets
         run: >-
@@ -58,12 +58,12 @@ jobs:
           --repo "${{ github.repository }}"
           --ref "${{ github.ref }}"
           --commit "${{ github.sha }}"
-          --registry-path "${{ env.LEDRA_REGISTRY_PATH }}"
+          --registry-path "${{ env.CATALOGA_REGISTRY_PATH }}"
 
       - name: Upload packaged assets
         uses: actions/upload-artifact@v7
         with:
-          name: ledra-demo-package
+          name: cataloga-demo-package
           path: deploy/cloudflare/public
 
   deploy-demo:
@@ -83,7 +83,7 @@ jobs:
       - name: Download packaged assets
         uses: actions/download-artifact@v8
         with:
-          name: ledra-demo-package
+          name: cataloga-demo-package
           path: deploy/cloudflare/public
 
       - name: Render production Wrangler config

@@ -1,11 +1,11 @@
 services:
-  ledra:
+  cataloga:
     build:
       context: ../..
       dockerfile: deploy/docker/Dockerfile
     environment:
       PORT: "8080"
-      LEDRA_REGISTRY_PATH: /data/registry
+      CATALOGA_REGISTRY_PATH: /data/registry
     ports:
       - "8080:8080"
     volumes:

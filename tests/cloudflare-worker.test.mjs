@@ -42,7 +42,7 @@ test('Cloudflare worker exposes views and metadata from packaged assets', async 
       }
     },
     '/metadata.json': {
-      product: 'Ledra',
+      product: 'Cataloga',
       deploymentVersion: 'test-deploy'
     }
   });

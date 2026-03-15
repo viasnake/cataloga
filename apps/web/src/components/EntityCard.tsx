@@ -1,4 +1,4 @@
-import type { EntityRecord } from '@ledra/types';
+import type { EntityRecord } from '@cataloga/types';
 import { Link, createSearchParams } from 'react-router-dom';
 import { formatAttributeValue, formatEntityTypeLabel, uiCopy } from '../copy';
 

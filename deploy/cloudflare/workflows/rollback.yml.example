@@ -1,4 +1,4 @@
-name: ledra-rollback
+name: cataloga-rollback
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
 permissions:
   contents: read
 env:
-  LEDRA_REGISTRY_PATH: registry
+  CATALOGA_REGISTRY_PATH: registry
 
 jobs:
   build-rollback:
@@ -42,10 +42,10 @@ jobs:
         run: npm test
 
       - name: Validate rollback registry data
-        run: npm exec --workspace @ledra/cli ledra -- validate --registry "${{ github.workspace }}/${{ env.LEDRA_REGISTRY_PATH }}"
+        run: npm exec --workspace @cataloga/cli cataloga -- validate --registry "${{ github.workspace }}/${{ env.CATALOGA_REGISTRY_PATH }}"
 
       - name: Export rollback bundle
-        run: npm exec --workspace @ledra/cli ledra -- export --registry "${{ github.workspace }}/${{ env.LEDRA_REGISTRY_PATH }}" --out ".artifacts/cloudflare/bundle.json"
+        run: npm exec --workspace @cataloga/cli cataloga -- export --registry "${{ github.workspace }}/${{ env.CATALOGA_REGISTRY_PATH }}" --out ".artifacts/cloudflare/bundle.json"
 
       - name: Resolve rollback commit SHA
         id: rollback-sha
@@ -59,12 +59,12 @@ jobs:
           --repo "${{ github.repository }}"
           --ref "${{ inputs.deploy_ref }}"
           --commit "${{ steps.rollback-sha.outputs.sha }}"
-          --registry-path "${{ env.LEDRA_REGISTRY_PATH }}"
+          --registry-path "${{ env.CATALOGA_REGISTRY_PATH }}"
 
       - name: Upload packaged assets
         uses: actions/upload-artifact@v4
         with:
-          name: ledra-rollback-package
+          name: cataloga-rollback-package
           path: deploy/cloudflare/public
 
   deploy-rollback:
@@ -80,7 +80,7 @@ jobs:
       - name: Download packaged assets
         uses: actions/download-artifact@v4
         with:
-          name: ledra-rollback-package
+          name: cataloga-rollback-package
           path: deploy/cloudflare/public
 
       - name: Copy Wrangler config

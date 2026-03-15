@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ledra.dev/schemas/hosting-control-tenant.schema.json",
-  "title": "Ledra Hosting Control Tenant",
+  "$id": "https://cataloga.dev/schemas/hosting-control-tenant.schema.json",
+  "title": "Cataloga Hosting Control Tenant",
   "type": "object",
   "required": [
     "tenantId",
@@ -64,9 +64,9 @@
     },
     "engine": {
       "type": "object",
-      "required": ["ledraVersion"],
+      "required": ["catalogaVersion"],
       "properties": {
-        "ledraVersion": {
+        "catalogaVersion": {
           "type": "string",
           "minLength": 1
         }

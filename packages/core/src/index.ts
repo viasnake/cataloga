@@ -4,7 +4,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { extname, join, relative, resolve } from 'node:path';
 import { load as loadYaml } from 'js-yaml';
-import { REGISTRY_LAYOUT } from '@ledra/schemas';
+import { REGISTRY_LAYOUT } from '@cataloga/schemas';
 import {
   IMPLEMENTATION_ORDER,
   type BuiltinEntityTypeName,
@@ -14,9 +14,9 @@ import {
   type RegistryGraph,
   type RelationRecord,
   type ViewRecord
-} from '@ledra/types';
+} from '@cataloga/types';
 
-export const packageName = '@ledra/core';
+export const packageName = '@cataloga/core';
 
 type RecordLike = Record<string, unknown>;
 

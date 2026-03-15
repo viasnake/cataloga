@@ -15,7 +15,7 @@ test('managed-hosting deployment helpers create verification and rollback plans'
     metadata: 'passed'
   });
   const metadata = createDeploymentMetadataV3({
-    product: 'Ledra',
+    product: 'Cataloga',
     metadataSchemaVersion: 3,
     deploymentVersion: 'dep_1',
     generatedAt: '2026-03-14T12:00:00Z',
@@ -25,7 +25,7 @@ test('managed-hosting deployment helpers create verification and rollback plans'
     },
     engine: {
       version: 'v0.2.0',
-      repo: 'viasnake/ledra',
+      repo: 'viasnake/cataloga',
       commitSha: 'abcdef1234567'
     },
     data: {

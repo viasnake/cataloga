@@ -1,5 +1,5 @@
 {
-  "name": "@ledra/web",
+  "name": "@cataloga/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,9 +14,9 @@
   },
   "exports": "./src/index.ts",
   "dependencies": {
-    "@ledra/schemas": "0.1.0",
-    "@ledra/search": "0.1.0",
-    "@ledra/types": "0.1.0",
+    "@cataloga/schemas": "0.1.0",
+    "@cataloga/search": "0.1.0",
+    "@cataloga/types": "0.1.0",
     "@tailwindcss/vite": "^4.2.1",
     "clsx": "^2.1.1",
     "d3-force": "^3.0.0",

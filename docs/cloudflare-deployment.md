@@ -1,6 +1,6 @@
 # Cloudflare self-host deployment
 
-This guide describes the direct self-host path for Ledra on Cloudflare.
+This guide describes the direct self-host path for Cataloga on Cloudflare.
 
 If you are building a hosted product where customer data stays in customer-owned repositories and Cloudflare
 credentials stay operator-side, start with `docs/managed-hosting-architecture.md` instead.
@@ -11,7 +11,7 @@ The direct self-host path assumes one deployment repository controlled by the op
 
 That repository contains:
 
-- Ledra packages and apps
+- Cataloga packages and apps
 - `registry/` as the source-of-truth data tree
 - the Cloudflare Worker and Wrangler template
 - the Cloudflare packaging script
@@ -104,7 +104,7 @@ The deployment repository provides a packaging script:
 node scripts/package-cloudflare.mjs \
   --bundle .artifacts/cloudflare/bundle.json \
   --out deploy/cloudflare/public \
-  --repo "example/home-ledra" \
+  --repo "example/home-cataloga" \
   --ref "refs/heads/main" \
   --commit "<repo_sha>" \
   --registry-path "registry"
@@ -137,7 +137,7 @@ After bootstrap, routine preview, production, and rollback actions should run fr
 
 ## Upstream update model
 
-If the deployment repository is a fork, treat the original Ledra repository as upstream.
+If the deployment repository is a fork, treat the original Cataloga repository as upstream.
 
 1. create an upgrade branch in the fork
 2. merge or rebase upstream changes

@@ -1,6 +1,6 @@
 # API reference
 
-Ledra exposes a read-only HTTP API. The API never mutates registry data and is intended to sit beside Git-managed source files or generated bundle artifacts.
+Cataloga exposes a read-only HTTP API. The API never mutates registry data and is intended to sit beside Git-managed source files or generated bundle artifacts.
 
 ## Base behavior
 

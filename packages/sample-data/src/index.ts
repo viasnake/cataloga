@@ -1,4 +1,4 @@
-export const packageName = '@ledra/sample-data';
+export const packageName = '@cataloga/sample-data';
 
 export const SAMPLE_REGISTRY_ROOT = 'packages/sample-data/registry';
 

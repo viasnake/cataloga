@@ -10,7 +10,7 @@ RUN npm install
 RUN npm run build
 
 ENV PORT=8080
-ENV LEDRA_REGISTRY_PATH=/data/registry
+ENV CATALOGA_REGISTRY_PATH=/data/registry
 EXPOSE 8080
 
 CMD ["node", "deploy/docker/server.mjs"]

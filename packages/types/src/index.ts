@@ -1,4 +1,4 @@
-export const packageName = '@ledra/types';
+export const packageName = '@cataloga/types';
 
 export const IMPLEMENTATION_ORDER = [
   'packages/types',
@@ -223,7 +223,7 @@ export type RegistryDiagnostics = {
   sourceFilePaths: readonly string[];
 };
 
-export type LedraBundle = {
+export type CatalogaBundle = {
   kind: 'static-bundle';
   schemaVersion: 1;
   generatedAt: string;

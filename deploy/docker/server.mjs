@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { parse } from 'node:url';
 import { createReadOnlyApi } from '../../apps/api/dist/apps/api/src/index.js';
 
-const registryPath = process.env.LEDRA_REGISTRY_PATH ?? '/data/registry';
+const registryPath = process.env.CATALOGA_REGISTRY_PATH ?? '/data/registry';
 const port = Number(process.env.PORT ?? '8080');
 const api = createReadOnlyApi(registryPath);
 
@@ -59,5 +59,5 @@ createServer((request, response) => {
 
   return send(response, 404, { error: 'not found' });
 }).listen(port, () => {
-  console.log(`Ledra read-only API listening on :${port} (registry: ${registryPath})`);
+  console.log(`Cataloga read-only API listening on :${port} (registry: ${registryPath})`);
 });

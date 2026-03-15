@@ -1,5 +1,5 @@
 {
-  "name": "@ledra/schemas",
+  "name": "@cataloga/schemas",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,6 +12,6 @@
   },
   "exports": "./dist/schemas/src/index.js",
   "dependencies": {
-    "@ledra/types": "0.1.0"
+    "@cataloga/types": "0.1.0"
   }
 }

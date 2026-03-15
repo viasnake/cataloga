@@ -1,11 +1,11 @@
 {
-  "name": "@ledra/cli",
+  "name": "@cataloga/cli",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "main": "dist/apps/cli/src/index.js",
   "bin": {
-    "ledra": "bin/ledra.js"
+    "cataloga": "bin/cataloga.js"
   },
   "types": "dist/apps/cli/src/index.d.ts",
   "scripts": {
@@ -15,10 +15,10 @@
   },
   "exports": "./dist/apps/cli/src/index.js",
   "dependencies": {
-    "@ledra/api": "0.1.0",
-    "@ledra/bundle": "0.1.0",
-    "@ledra/core": "0.1.0",
-    "@ledra/search": "0.1.0",
-    "@ledra/validator": "0.1.0"
+    "@cataloga/api": "0.1.0",
+    "@cataloga/bundle": "0.1.0",
+    "@cataloga/core": "0.1.0",
+    "@cataloga/search": "0.1.0",
+    "@cataloga/validator": "0.1.0"
   }
 }

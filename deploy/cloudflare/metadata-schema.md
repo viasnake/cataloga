@@ -1,6 +1,6 @@
 # Cloudflare deployment metadata schema
 
-Ledra keeps the exported registry bundle unchanged and writes deployment metadata to a sibling
+Cataloga keeps the exported registry bundle unchanged and writes deployment metadata to a sibling
 `metadata.json` file.
 
 This schema describes the direct self-host Cloudflare path. The managed-hosting architecture described in
@@ -26,12 +26,12 @@ public/
 
 ```json
 {
-  "product": "Ledra",
+  "product": "Cataloga",
   "metadataSchemaVersion": 2,
   "deploymentVersion": "abcdef123456-20260314T120000Z",
   "generatedAt": "2026-03-14T12:00:00.000Z",
   "repository": {
-    "repo": "example/home-ledra",
+    "repo": "example/home-cataloga",
     "ref": "refs/heads/main",
     "commitSha": "abcdef123456abcdef123456abcdef123456abcd",
     "registryPath": "registry"

@@ -1,7 +1,7 @@
-import type { ReadOnlyRepository } from '@ledra/core';
-import type { EntityRecord, RegistryGraph, RelationRecord } from '@ledra/types';
+import type { ReadOnlyRepository } from '@cataloga/core';
+import type { EntityRecord, RegistryGraph, RelationRecord } from '@cataloga/types';
 
-export const packageName = '@ledra/search';
+export const packageName = '@cataloga/search';
 
 export type SearchAttributeFilter = {
   field: string;

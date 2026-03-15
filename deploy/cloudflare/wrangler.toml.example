@@ -1,4 +1,4 @@
-name = "ledra-registry"
+name = "cataloga-registry"
 main = "worker.mjs"
 compatibility_date = "2025-01-01"
 
