@@ -9,7 +9,7 @@ import type {
 } from '@ledra/types';
 
 export const appName = '@ledra/web';
-export const DEFAULT_BUNDLE_PATH = './bundle.json';
+export const DEFAULT_BUNDLE_PATH = '/bundle.json';
 export const viewerMode = VIEWER_POLICY.mode;
 
 export type FilteredViewState = {
@@ -20,6 +20,7 @@ export type FilteredViewState = {
 export type EntityRelationEntry = {
   direction: 'outgoing' | 'incoming';
   relation: RelationRecord;
+  relatedEntity: EntityRecord | undefined;
 };
 
 const intersectEntityLists = (
@@ -34,6 +35,17 @@ export const getSelectedView = (
   graph: RegistryGraph,
   viewId: string | undefined
 ): ViewRecord | undefined => graph.views.find((view) => view.id === viewId);
+
+export const getEntityById = (
+  bundle: LedraBundle,
+  entityId: string | undefined
+): EntityRecord | undefined => {
+  if (!entityId) {
+    return undefined;
+  }
+
+  return bundle.graph.entities.find((entity) => entity.id === entityId);
+};
 
 export const filterEntitiesForViewer = (
   bundle: LedraBundle,
@@ -66,11 +78,23 @@ export const getEntityRelations = (
 ): readonly EntityRelationEntry[] => {
   return bundle.graph.relations.flatMap((relation): readonly EntityRelationEntry[] => {
     if (relation.source.id === entityId) {
-      return [{ direction: 'outgoing' as const, relation }];
+      return [
+        {
+          direction: 'outgoing' as const,
+          relation,
+          relatedEntity: getEntityById(bundle, relation.target.id)
+        }
+      ];
     }
 
     if (relation.target.id === entityId) {
-      return [{ direction: 'incoming' as const, relation }];
+      return [
+        {
+          direction: 'incoming' as const,
+          relation,
+          relatedEntity: getEntityById(bundle, relation.source.id)
+        }
+      ];
     }
 
     return [];

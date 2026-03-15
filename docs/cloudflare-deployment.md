@@ -36,6 +36,7 @@ Cloudflare reads only packaged assets. It does not fetch registry data from GitH
 ```text
 public/
   index.html
+  _redirects
   assets/
   bundle.json
   metadata.json
@@ -43,6 +44,11 @@ public/
 
 - `bundle.json`: exported registry bundle
 - `metadata.json`: deployment audit data for preview, production, and rollback
+- `_redirects`: static-host fallback rule for browser deep links such as `/entities/<id>`
+
+The bundled viewer is a route-based SPA. Cloudflare Worker fallback and `_redirects` ensure that
+extensionless HTML routes resolve to `index.html` while `/bundle.json`, `/metadata.json`,
+`/assets/*`, `/api/*`, and `/health` keep their direct runtime behavior.
 
 ## GitHub Actions model
 

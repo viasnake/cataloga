@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 declare module 'node:fs' {
   export const existsSync: (...args: any[]) => any;
   export const readdirSync: (...args: any[]) => any;

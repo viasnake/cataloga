@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/triple-slash-reference */
 /// <reference path="./node-shims.d.ts" />
 
 declare const process:

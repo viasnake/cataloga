@@ -13,6 +13,7 @@ The Cloudflare runtime serves only packaged assets and read-only API responses.
 ## Runtime routes
 
 - `/` -> static viewer from `public/`
+- `/entities/*` and other extensionless viewer paths -> Worker rewrites to `index.html`
 - `/bundle.json` -> exported registry bundle
 - `/metadata.json` -> deployment audit metadata
 - `/api/views` -> Worker returns `bundle.graph.views`
@@ -86,6 +87,8 @@ See `deploy/cloudflare/metadata-schema.md` for the public deployment metadata co
 ## Required configuration
 
 - `assets.binding = "ASSETS"` is required because `worker.mjs` reads packaged assets directly.
+- `worker.mjs` also provides SPA fallback for extensionless HTML navigation while preserving
+  `/bundle.json`, `/metadata.json`, `/assets/*`, `/api/*`, and `/health` as reserved runtime paths.
 - `metadata.json` must be packaged next to `bundle.json`.
 - Production should use a custom domain via `env.production.routes`.
 - Preview URL comments require a `CLOUDFLARE_ACCOUNT_SUBDOMAIN` variable in the deployment repository.

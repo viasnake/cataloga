@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/triple-slash-reference */
 /// <reference path="./node-shims.d.ts" />
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs';

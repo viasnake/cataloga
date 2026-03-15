@@ -10,12 +10,23 @@ const createJsonResponse = (payload, status = 200) =>
     }
   });
 
+const createHtmlResponse = (payload, status = 200) =>
+  new Response(payload, {
+    status,
+    headers: {
+      'content-type': 'text/html; charset=utf-8'
+    }
+  });
+
 const createEnv = (assetMap) => ({
   ASSETS: {
     fetch: async (request) => {
       const path = request instanceof URL ? request.pathname : new URL(request.url).pathname;
       if (path in assetMap) {
-        return createJsonResponse(assetMap[path]);
+        const payload = assetMap[path];
+        return typeof payload === 'string'
+          ? createHtmlResponse(payload)
+          : createJsonResponse(payload);
       }
 
       return new Response('not found', { status: 404 });
@@ -64,4 +75,35 @@ test('Cloudflare worker rejects non-read-only methods on API routes', async () =
   );
 
   assert.equal(response.status, 405);
+});
+
+test('Cloudflare worker falls back to index.html for SPA routes', async () => {
+  const env = createEnv({
+    '/index.html': '<!doctype html><title>viewer</title>'
+  });
+
+  const response = await worker.fetch(
+    new Request('https://example.com/entities/host-web-01', {
+      headers: {
+        accept: 'text/html'
+      }
+    }),
+    env
+  );
+
+  assert.equal(response.status, 200);
+  assert.match(await response.text(), /viewer/u);
+});
+
+test('Cloudflare worker keeps missing static assets as 404', async () => {
+  const response = await worker.fetch(
+    new Request('https://example.com/assets/index-missing.js', {
+      headers: {
+        accept: '*/*'
+      }
+    }),
+    createEnv({})
+  );
+
+  assert.equal(response.status, 404);
 });

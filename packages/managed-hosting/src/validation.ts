@@ -315,7 +315,7 @@ export const validateHostingControlTenantManifest = (
     ledraVersion = readString(engine.ledraVersion, 'manifest.engine.ledraVersion', issues) ?? '';
   }
 
-  let environment: 'production' = 'production';
+  let environment = 'production' as const;
   let cloudflareTarget = '';
   let productionHostname = '';
   if (deployment !== undefined) {

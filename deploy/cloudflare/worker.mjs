@@ -13,6 +13,30 @@ const readAssetJson = async (env, requestUrl, assetPath) => {
   };
 };
 
+const RESERVED_PATHS = new Set(['/health', '/bundle.json', '/metadata.json', '/index.html']);
+const RESERVED_PREFIXES = ['/api/', '/assets/'];
+const STATIC_ASSET_PATTERN = /\.[a-z0-9]+$/iu;
+
+const isSpaNavigationRequest = (request, url) => {
+  if (!(request.method === 'GET' || request.method === 'HEAD')) {
+    return false;
+  }
+
+  if (RESERVED_PATHS.has(url.pathname)) {
+    return false;
+  }
+
+  if (RESERVED_PREFIXES.some((prefix) => url.pathname.startsWith(prefix))) {
+    return false;
+  }
+
+  if (STATIC_ASSET_PATTERN.test(url.pathname)) {
+    return false;
+  }
+
+  return request.headers.get('accept')?.includes('text/html') ?? false;
+};
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -45,6 +69,12 @@ export default {
       return Response.json(metadata.payload);
     }
 
-    return env.ASSETS.fetch(request);
+    const assetResponse = await env.ASSETS.fetch(request);
+
+    if (assetResponse.status !== 404 || !isSpaNavigationRequest(request, url)) {
+      return assetResponse;
+    }
+
+    return env.ASSETS.fetch(new URL('/index.html', url));
   }
 };
