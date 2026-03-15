@@ -124,4 +124,9 @@
   .data-chip strong {
     @apply mt-2 block text-sm font-semibold text-slate-800;
   }
+
+  .defer-content {
+    content-visibility: auto;
+    contain-intrinsic-size: 780px;
+  }
 }

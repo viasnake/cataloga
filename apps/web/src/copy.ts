@@ -31,7 +31,9 @@ export const uiCopy = {
     openWorkspace: 'ワークスペースへ戻る',
     backToResults: '結果に戻る',
     clearFilters: '絞り込みを解除',
-    openNode: 'ノードを開く'
+    openNode: 'ノードを開く',
+    showGraph: 'グラフを表示',
+    hideGraph: 'グラフを非表示'
   },
   labels: {
     generatedAt: '生成日時',
