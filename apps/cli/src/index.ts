@@ -16,12 +16,13 @@ declare const process:
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createCatalogaRuntime, defaultConfigPath } from '@cataloga/core';
+import { buildBundle } from '@cataloga/bundle';
+import { createCatalogaRuntime, defaultConfigPath, loadRegistryFromFs } from '@cataloga/core';
 
 export const appName = '@cataloga/cli';
 export const cliVersion = '1.0.0';
 
-type Command = 'source' | 'ingest' | 'snapshot' | 'topology' | 'drift' | 'serve';
+type Command = 'source' | 'ingest' | 'snapshot' | 'topology' | 'drift' | 'serve' | 'export';
 
 type ParsedArgs = {
   command?: Command;
@@ -40,6 +41,7 @@ const usage = [
   '  topology build [--view <site-overview|aws-vpc-overview|internet-ingress|service-dependency|drift-view>]',
   '  topology export --id <topology-id> --out <path>',
   '  drift compute',
+  '  export --registry <path> --out <path>',
   '  serve',
   '',
   'Global flags:',
@@ -49,7 +51,11 @@ const usage = [
 ].join('\n');
 
 const parseArgs = (args: readonly string[]): ParsedArgs => {
-  const [command, subcommand, ...rest] = args;
+  const normalizedArgs = args[0] === 'cataloga' ? args.slice(1) : args;
+  const [command, maybeSubcommand, ...remaining] = normalizedArgs;
+  const hasSubcommand = maybeSubcommand !== undefined && !maybeSubcommand.startsWith('--');
+  const subcommand = hasSubcommand ? maybeSubcommand : undefined;
+  const rest = hasSubcommand ? remaining : normalizedArgs.slice(1);
   const flags: Record<string, string | true> = {};
 
   for (let index = 0; index < rest.length; index += 1) {
@@ -204,6 +210,26 @@ const handleServe = async (args: ParsedArgs): Promise<string> => {
   return formatJson({ ok: true, port, configPath, status: 'Listening' });
 };
 
+const handleExport = (args: ParsedArgs): string => {
+  const registryRoot = asString(args.flags.registry);
+  const outPath = asString(args.flags.out);
+
+  if (!registryRoot || !outPath) {
+    return formatJson({ error: 'export requires --registry and --out' });
+  }
+
+  const repository = loadRegistryFromFs(registryRoot);
+  const bundle = buildBundle(repository);
+  writeJson(outPath, bundle);
+
+  return formatJson({
+    ok: true,
+    registry: registryRoot,
+    out: outPath,
+    counts: bundle.diagnostics.counts
+  });
+};
+
 export const runCatalogaCli = async (argv: readonly string[]): Promise<string> => {
   if (argv.includes('--help') || argv.includes('-h')) {
     return usage;
@@ -228,6 +254,8 @@ export const runCatalogaCli = async (argv: readonly string[]): Promise<string> =
       return handleDrift(args);
     case 'serve':
       return handleServe(args);
+    case 'export':
+      return handleExport(args);
     default:
       return usage;
   }
